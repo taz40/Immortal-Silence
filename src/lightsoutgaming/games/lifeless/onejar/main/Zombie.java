@@ -80,7 +80,7 @@ public class Zombie extends EntityLiving {
 	        }
 	      }
 	      int dist = (int)Math.sqrt((this.x - p.x) * (this.x - p.x) + (this.y - p.y) * (this.y - p.y));
-	      double distperframe = Math.sqrt((0.0D - 1.0D * Math.cos((this.rotation - 90.0D) * 3.141592653589793D / 180.0D)) * (0.0D - 1.0D * Math.cos((this.rotation - 90.0D) * 3.141592653589793D / 180.0D)) + (0.0D - 1.0D * Math.sin((this.rotation - 90.0D) * 3.141592653589793D / 180.0D)) * (0.0D - 1.0D * Math.sin((this.rotation - 90.0D) * 3.141592653589793D / 180.0D)));
+	      double distperframe = Math.sqrt((type.movementMulti * Math.cos((this.rotation - 90.0D) * 3.141592653589793D / 180.0D)) * (type.movementMulti * Math.cos((this.rotation - 90.0D) * 3.141592653589793D / 180.0D)) + (type.movementMulti * Math.sin((this.rotation - 90.0D) * 3.141592653589793D / 180.0D)) * (type.movementMulti * Math.sin((this.rotation - 90.0D) * 3.141592653589793D / 180.0D)));
 	      int numofmovementframes = (int)Math.abs(dist / distperframe);
 	      for (int i = 0; i < numofmovementframes; i++){
 	        this.commandlist.add(Command.moveforward);
@@ -149,8 +149,8 @@ public class Zombie extends EntityLiving {
 	      } else if (currCommand == Command.rotatecounterclock) {
 	        this.rotation -= 2.0D;
 	      } else if (currCommand == Command.moveforward) {
-	        float px = (float)(2.0D * Math.cos((this.rotation - 90.0D) * 3.141592653589793D / 180.0D) + this.x);
-	        float py = (float)(2.0D * Math.sin((this.rotation - 90.0D) * 3.141592653589793D / 180.0D) + this.y);
+	        float px = (float)(type.movementMulti * Math.cos((this.rotation - 90.0D) * 3.141592653589793D / 180.0D) + this.x);
+	        float py = (float)(type.movementMulti * Math.sin((this.rotation - 90.0D) * 3.141592653589793D / 180.0D) + this.y);
 
 	        if (!((Arena)this.screen).detectCollision(px, py, this.width, this.height, this)) {
 	          this.x = px;

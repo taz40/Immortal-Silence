@@ -3,7 +3,6 @@ package lightsoutgaming.games.lifeless.onejar.main;
 import java.awt.Graphics2D;
 
 import taz40.lightsoutgamingengine.V1.Button;
-import taz40.lightsoutgamingengine.V1.Entity;
 import taz40.lightsoutgamingengine.V1.Function;
 import taz40.lightsoutgamingengine.V1.Screen;
 import taz40.lightsoutgamingengine.V1.ScreenFactory;
@@ -14,7 +13,7 @@ public class ChangeLogScreen extends Screen {
 		super(screenfactory);
 		// TODO Auto-generated constructor stub
 	}
-
+	
 	@Override
 	public void onCustomCreate() {
 		// TODO Auto-generated method stub
@@ -25,11 +24,17 @@ public class ChangeLogScreen extends Screen {
 				// TODO Auto-generated method stub
 				screenfactory.showScreen(new OptionsScreen(screenfactory));
 			}}, this));
+		
+		
 	}
 
 	@Override
-	public void onCustomDraw(Graphics2D arg0) {
+	public void onCustomDraw(Graphics2D g) {
 		// TODO Auto-generated method stub
+		g.scale(2, 2);
+		g.drawString("8-12-2013 SNAPSHOT", 100, 100);
+		g.drawString("-AI updates", 100, 120);
+		g.drawString("-Made ChangeLog", 100, 140);
 		
 	}
 
