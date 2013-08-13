@@ -53,6 +53,12 @@ public class LoadingScreen extends Screen {
 		Textures.pistolShot = texturerenderer.LoadSprite(Textures.spritesheet, 188, 39, 2, 2);
 	}
 
+	@Override
+	public void onCustomDestroy() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 	
 }

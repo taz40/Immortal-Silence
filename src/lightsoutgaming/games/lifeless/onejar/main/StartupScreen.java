@@ -18,26 +18,26 @@ public class StartupScreen extends Screen {
 	@Override
 	public void onCustomCreate() {
 		// TODO Auto-generated method stub
-		this.addEntity(Button.createXCenteredButton("Play Tutorial", 100, 210, 50, 3, Textures.buttonpressed, Textures.buttonunpressed, new Function(){
+		this.addEntity(Button.createXCenteredButton("Play Tutorial", 100, 210, 50, 3, Textures.buttonpressed, Textures.buttonunpressed, new Function(this){
 
 			@Override
-			public void Do(Entity e) {
+			public void run() {
 				// TODO Auto-generated method stub
 				
 			}}, this));
 		
-		this.addEntity(Button.createXCenteredButton("Skip Tutorial", 160, 210, 50, 3, Textures.buttonpressed, Textures.buttonunpressed, new Function(){
+		this.addEntity(Button.createXCenteredButton("Skip Tutorial", 160, 210, 50, 3, Textures.buttonpressed, Textures.buttonunpressed, new Function(this){
 
 			@Override
-			public void Do(Entity e) {
+			public void run() {
 				// TODO Auto-generated method stub
 				screenfactory.showScreen(new Arena(screenfactory));
 			}}, this));
 		
-		this.addEntity(Button.createXCenteredButton("Back", 400, 100, 50, 3, Textures.buttonpressed, Textures.buttonunpressed, new Function(){
+		this.addEntity(Button.createXCenteredButton("Back", 400, 100, 50, 3, Textures.buttonpressed, Textures.buttonunpressed, new Function(this){
 
 			@Override
-			public void Do(Entity e) {
+			public void run() {
 				// TODO Auto-generated method stub
 				screenfactory.showScreen(new MainMenu(screenfactory));
 			}}, this));
@@ -53,6 +53,12 @@ public class StartupScreen extends Screen {
 	public void onCustomUpdate() {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void onCustomDestroy() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

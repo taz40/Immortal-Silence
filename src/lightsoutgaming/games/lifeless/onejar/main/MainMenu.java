@@ -20,37 +20,37 @@ public class MainMenu extends Screen {
 	@Override
 	public void onCustomCreate() {
 		// TODO Auto-generated method stub
-		this.addEntity(Button.createXCenteredButton("Start Game", 100, 200, 50, 3, Textures.buttonpressed, Textures.buttonunpressed, new Function() {
+		this.addEntity(Button.createXCenteredButton("Start Game", 100, 200, 50, 3, Textures.buttonpressed, Textures.buttonunpressed, new Function(this) {
 
 			@Override
-			public void Do(Entity e) {
+			public void run() {
 				// TODO Auto-generated method stub
 				screenfactory.showScreen(new StartupScreen(screenfactory));
 			}
 			
 		},this));
-		this.addEntity(Button.createXCenteredButton("Options", 160, 200, 50, 3, Textures.buttonpressed, Textures.buttonunpressed, new Function() {
+		this.addEntity(Button.createXCenteredButton("Options", 160, 200, 50, 3, Textures.buttonpressed, Textures.buttonunpressed, new Function(this) {
 
 			@Override
-			public void Do(Entity e) {
+			public void run() {
 				// TODO Auto-generated method stub
 				screenfactory.showScreen(new OptionsScreen(screenfactory));
 			}
 			
 		}, this));
-		this.addEntity(Button.createXCenteredButton("Help", 220, 200, 50, 3, Textures.buttonpressed, Textures.buttonunpressed, new Function() {
+		this.addEntity(Button.createXCenteredButton("Help", 220, 200, 50, 3, Textures.buttonpressed, Textures.buttonunpressed, new Function(this) {
 
 			@Override
-			public void Do(Entity e) {
+			public void run() {
 				// TODO Auto-generated method stub
 				
 			}
 			
 		},this));
-		this.addEntity(Button.createXCenteredButton("Exit", 280, 200, 50, 3, Textures.buttonpressed, Textures.buttonunpressed, new Function() {
+		this.addEntity(Button.createXCenteredButton("Exit", 280, 200, 50, 3, Textures.buttonpressed, Textures.buttonunpressed, new Function(this) {
 			
 			@Override
-			public void Do(Entity e) {
+			public void run() {
 				// TODO Auto-generated method stub
 				System.out.println("Exit Clicked");
 				getScreenFactory().getGame().Exit();
@@ -67,6 +67,14 @@ public class MainMenu extends Screen {
 
 	@Override
 	public void onCustomUpdate() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+	@Override
+	public void onCustomDestroy() {
 		// TODO Auto-generated method stub
 		
 	}

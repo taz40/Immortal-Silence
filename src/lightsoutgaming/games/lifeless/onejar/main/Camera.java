@@ -37,6 +37,12 @@ public class Camera extends EntityLiving{
 		
 	}
 
+	@Override
+	public void onCustomDestroy() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 	
 }

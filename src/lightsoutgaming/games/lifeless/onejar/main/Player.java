@@ -24,6 +24,9 @@ public class Player extends EntityLiving {
 	
 
 
+	
+	int CamX = 0;
+	int CamY = 0;
 	Point image = new Point();
 	boolean paused = false;
 	Point mouse = new Point();
@@ -72,13 +75,15 @@ public class Player extends EntityLiving {
 	@Override
 	public void onCustomUpdate() {
 		// TODO Auto-generated method stub
+		CamX = (int) (x-150);
+		CamY = (int) (y-100);
 		if(screen.getScreenFactory().getGame().getKeyboardListener().isKeyPressed(KeyEvent.VK_W)){
-			float px = (float) ((1 * Math.cos((rotation-90) * Math.PI / 180.0))+(x+150));
-			float py = (float) ((1 * Math.sin((rotation-90) * Math.PI / 180.0))+(y+100));
+			float px = (float) ((1 * Math.cos((rotation-90) * Math.PI / 180.0))+(x));
+			float py = (float) ((1 * Math.sin((rotation-90) * Math.PI / 180.0))+(y));
 			
 			if(!((Arena) screen).detectCollision(px, py, width, height, this)){
-				x = (px-150);
-				y = (py-100);
+				x = (px);
+				y = (py);
 			}
 			
 		}
@@ -98,7 +103,7 @@ public class Player extends EntityLiving {
 		}
 		if(screen.getScreenFactory().getGame().getMousePadListener().isMousePressed()){
 			if(CurWep == Weapon.Pistol){
-				screen.addEntity(new Shot(screen, x+150+8, y+100+8, rotation, Textures.pistolShot, this));
+				screen.addEntity(new Shot(screen, x+8, y+8, rotation, Textures.pistolShot, this));
 				screen.getScreenFactory().getGame().getMousePadListener().clickDone();
 			}
 		}
@@ -119,6 +124,12 @@ public class Player extends EntityLiving {
 
 	@Override
 	public void OnCollide(EntityLiving arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onCustomDestroy() {
 		// TODO Auto-generated method stub
 		
 	}

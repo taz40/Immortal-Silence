@@ -73,7 +73,7 @@ public class Zombie extends EntityLiving {
 	      double rotdiff = this.rotation - targetrot;
 	      int numofrotationframes = (int)Math.abs(rotdiff / 2.0D);
 	      for (int i = 0; i < numofrotationframes; i++) {
-	        if (rotdiff < 0.0D)
+	        if (rotdiff > 0.0D)
 	          this.commandlist.add(Command.rotatecounterclock);
 	        else {
 	          this.commandlist.add(Command.rotateclock);
@@ -92,7 +92,7 @@ public class Zombie extends EntityLiving {
 	@Override
 	public void onCustomUpdate() {
 		// TODO Auto-generated method stub
-		if(!((Arena)screen).pause){
+		
 			if(rotation > 360){
 				rotation = 0;
 			}
@@ -139,9 +139,9 @@ public class Zombie extends EntityLiving {
 				}
 			}
 			
-		}
 		
 		if(!arena.pause){
+			if(commandlist.size() > 0){
 		 Command currCommand = (Command)this.commandlist.get(0);
 	      this.commandlist.remove(0);
 	      if (currCommand == Command.rotateclock) {
@@ -149,13 +149,14 @@ public class Zombie extends EntityLiving {
 	      } else if (currCommand == Command.rotatecounterclock) {
 	        this.rotation -= 2.0D;
 	      } else if (currCommand == Command.moveforward) {
-	        float px = (float)(1.0D * Math.cos((this.rotation - 90.0D) * 3.141592653589793D / 180.0D) + this.x);
-	        float py = (float)(1.0D * Math.sin((this.rotation - 90.0D) * 3.141592653589793D / 180.0D) + this.y);
+	        float px = (float)(2.0D * Math.cos((this.rotation - 90.0D) * 3.141592653589793D / 180.0D) + this.x);
+	        float py = (float)(2.0D * Math.sin((this.rotation - 90.0D) * 3.141592653589793D / 180.0D) + this.y);
 
 	        if (!((Arena)this.screen).detectCollision(px, py, this.width, this.height, this)) {
 	          this.x = px;
 	          this.y = py;
 	        }
+	      }
 	      }
 		}
 		
@@ -172,8 +173,6 @@ public class Zombie extends EntityLiving {
 			}
 		}
 		
-		
-		
 	}
 
 	@Override
@@ -187,6 +186,12 @@ public class Zombie extends EntityLiving {
 		super.kill();
 		((Arena) screen).numofzombies--;
 		System.out.println("Zombie Killed");
+	}
+
+	@Override
+	public void onCustomDestroy() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

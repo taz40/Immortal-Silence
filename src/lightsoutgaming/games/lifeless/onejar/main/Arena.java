@@ -43,16 +43,20 @@ public class Arena extends Screen {
 	
 	public boolean isPlayerInRange(Player p, Zombie z){
 		//sight
-		if((p.sight + z.type.sightrange) < distance(p.x, p.y, z.x, z.y)){
-			return true;
-		//sound
-		}else if((p.sound + z.type.hearingrange) < distance(p.x, p.y, z.x, z.y)){
-			return true;
-		//smell
-		}else if((p.smell + z.type.smellrange) < distance(p.x, p.y, z.x, z.y)){
-			return true;
-		}else{
+		int pxCent = (int) (((((p.x)*2))+(p.width)));
+		int pyCent = (int) (((((p.y)*2))+(p.height)));
+		int zxCent = (int) ((((z.x*2))+(z.width)));
+		int zyCent = (int) ((((z.y*2))+(z.height)));
+		if((p.sight + z.type.sightrange) < distance(pxCent, pyCent, zxCent, zyCent)){
 			return false;
+		//sound
+		}else if((p.sound + z.type.hearingrange) < distance(pxCent, pyCent, zxCent, zyCent)){
+			return false;
+		//smell
+		}else if((p.smell + z.type.smellrange) < distance(pxCent, pyCent, zxCent, zyCent)){
+			return false;
+		}else{
+			return true;
 		}
 	}
 	
@@ -87,8 +91,8 @@ public class Arena extends Screen {
 		}
 		frames++;
 		if(player != null){
-		camera.x = player.x;
-		camera.y = player.y;
+		camera.x = player.CamX;
+		camera.y = player.CamY;
 		}else{
 			System.out.println("player is null");
 		}
@@ -116,6 +120,7 @@ public class Arena extends Screen {
 		}
 		if(getScreenFactory().getGame().getKeyboardListener().isKeyPressed(KeyEvent.VK_ESCAPE)){
 			getScreenFactory().showScreen(new MainMenu(getScreenFactory()));
+			t.cancel();
 		}
 		if(getScreenFactory().getGame().getKeyboardListener().isKeyPressed(KeyEvent.VK_F3)){
 			debug = !debug;
@@ -147,6 +152,12 @@ public class Arena extends Screen {
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public void onCustomDestroy() {
+		// TODO Auto-generated method stub
+		t.cancel();
 	}
 	
 	

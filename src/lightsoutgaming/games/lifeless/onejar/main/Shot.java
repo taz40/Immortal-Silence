@@ -58,5 +58,11 @@ public class Shot extends EntityLiving {
 			System.out.println("Shot Collision");
 		}
 	}
+
+	@Override
+	public void onCustomDestroy() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }
