@@ -8,6 +8,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+import taz40.lightsoutgamingengine.V1.Game;
+
 public class Map {
 
 	int zombiesatonetime;
@@ -15,8 +17,8 @@ public class Map {
 	int width, height;
 	int background;
 	
-	public Map(String path){
-		File file = new File(path);
+	public Map(String path, Game game){
+		File file = new File(path+"\\info.txt");
 		FileReader fr = null;
 		try {
 			fr = new FileReader(file);
@@ -36,6 +38,8 @@ public class Map {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		background = game.texturerenderer.LoadTexture(path+"\bg.png");
+		
 	}
 	
 }

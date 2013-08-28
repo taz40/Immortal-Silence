@@ -11,6 +11,7 @@ import taz40.lightsoutgamingengine.V1.Entity;
 import taz40.lightsoutgamingengine.V1.EntityLiving;
 import taz40.lightsoutgamingengine.V1.Screen;
 import taz40.lightsoutgamingengine.V1.ScreenFactory;
+import taz40.lightsoutgamingengine.V1.TextureRenderer;
 
 public class Arena extends Screen {
 
@@ -24,6 +25,7 @@ public class Arena extends Screen {
 	public boolean debug = false;
 	public boolean pause = false;
 	public Player player = new Player(this, PlayerT.Normal);
+	public Map map = new Map("C:\\Users\\Samuel\\Desktop\\testmap", screenfactory.getGame());
 	
 	public Arena(ScreenFactory screenfactory) {
 		super(screenfactory);
@@ -80,6 +82,7 @@ public class Arena extends Screen {
 		if(debug){
 			g.drawString("FPS: "+fps, 5, 200);
 		}
+		TextureRenderer.DrawTexture(map.background, 0, 0, map.width, map.height, g);
 	}
 
 	@Override
