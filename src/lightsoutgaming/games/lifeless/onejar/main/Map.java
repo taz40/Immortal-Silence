@@ -38,7 +38,12 @@ public class Map {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		background = game.texturerenderer.LoadTexture(path+"\bg.png");
+		if(zombiesatonetime == -1 || zobiechance == -1 || width == -1 || height == -1){
+			System.err.println("map null");
+		}
+		System.out.println("widht: "+width);
+		System.out.println("height: "+height);
+		background = game.texturerenderer.LoadTexture(path+"\\bg.png");
 		
 	}
 	
