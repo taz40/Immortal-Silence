@@ -25,7 +25,7 @@ public class Arena extends Screen {
 	public boolean debug = false;
 	public boolean pause = false;
 	public Player player = new Player(this, PlayerT.Normal);
-	public Map map = new Map("C:\\Users\\108147\\Desktop\\test map", screenfactory.getGame());
+	public Map map = new Map("C:\\Users\\Samuel\\Desktop\\testmap", screenfactory.getGame());
 	
 	public Arena(ScreenFactory screenfactory) {
 		super(screenfactory);
@@ -82,7 +82,7 @@ public class Arena extends Screen {
 		if(debug){
 			g.drawString("FPS: "+fps, 5, 200);
 		}
-		TextureRenderer.DrawTexture(map.background, (int)(0-camera.x), (int)(0-camera.y), map.width, map.height, g);
+		TextureRenderer.DrawTexture(map.background, (int)(0-camera.x)/2, (int)(0-camera.y)/2, map.width, map.height, g);
 	}
 
 	@Override
@@ -112,7 +112,7 @@ public class Arena extends Screen {
 				y = rand.nextInt(230-30);
 				e = new Zombie(this, x, y, rand.nextInt(360), ZType.normal);
 			}
-			this.addEntity(e);
+			//this.addEntity(e);
 			
 			this.numofzombies++;
 			System.out.println("New Zombie");
@@ -133,6 +133,29 @@ public class Arena extends Screen {
 			pause = !pause;
 			getScreenFactory().getGame().getKeyboardListener().unpresskey(KeyEvent.VK_SPACE);
 		}
+		
+		if(player.CamX <= 0){
+			camera.x = 0;
+			player.poffsetX = (int) player.CamX;
+		}else if(player.CamX+screenfactory.getGame().getWindow().getWidth() >= map.width){
+			camera.x = map.width-screenfactory.getGame().getWindow().getWidth();
+			player.poffsetX = (int) player.CamX;
+		}else{
+			player.poffsetX = 0;
+		}
+		
+		if(player.CamY <= 0){
+			camera.y = 0;
+			player.poffsetY = (int) player.CamY;
+		}else if(player.CamY+screenfactory.getGame().getWindow().getHeight() >= map.height){
+			camera.y = map.height-screenfactory.getGame().getWindow().getHeight();
+			player.poffsetY = (int) player.CamY;
+		}else{
+			player.poffsetY = 0;
+		}
+		
+		
+		
 		
 		
 		

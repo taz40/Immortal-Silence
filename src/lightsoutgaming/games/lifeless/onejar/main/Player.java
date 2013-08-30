@@ -20,11 +20,14 @@ public class Player extends EntityLiving {
 		sight = type.sightB;
 		sound = type.soundB;
 		smell = type.smellB;
+		x = camoffsetx;
+		y = camoffsety;
 	}
 	
 
 
-	
+	public int camoffsetx = 200;
+	public int camoffsety = 150;
 	int CamX = 0;
 	int CamY = 0;
 	Point image = new Point();
@@ -35,6 +38,8 @@ public class Player extends EntityLiving {
 	int sight;
 	int sound;
 	int smell;
+	public int poffsetX;
+	public int poffsetY;
 
 	@Override
 	public void onCustomCreate() {
@@ -52,7 +57,7 @@ public class Player extends EntityLiving {
 	public void onCustomDraw(Graphics2D g) {
 		// TODO Auto-generated method stub
 		if(CurWep == Weapon.Pistol){
-			TextureRenderer.DrawSprite(Textures.redplayerPistol, Math.round(150), Math.round(100), 2, rotation, g);
+			TextureRenderer.DrawSprite(Textures.redplayerPistol, (int)(x-(x-150))+poffsetX, (int)(y-(y-100))+poffsetY, 2, rotation, g);
 		}else{
 			TextureRenderer.DrawSprite(Textures.redplayeridle, Math.round(0), Math.round(0), 2, rotation, g);
 		}
@@ -75,24 +80,24 @@ public class Player extends EntityLiving {
 	@Override
 	public void onCustomUpdate() {
 		// TODO Auto-generated method stub
-		CamX = (int) (x-150);
-		CamY = (int) (y-100);
+		CamX = (int) (x-camoffsetx);
+		CamY = (int) (y-camoffsety);
 		if(screen.getScreenFactory().getGame().getKeyboardListener().isKeyPressed(KeyEvent.VK_W)){
-			float px = (float) ((1 * Math.cos((rotation-90) * Math.PI / 180.0))+(x));
-			float py = (float) ((1 * Math.sin((rotation-90) * Math.PI / 180.0))+(y));
+			float px = (float) ((1 * Math.cos((rotation-90) * Math.PI / 180.0))+(x+camoffsetx));
+			float py = (float) ((1 * Math.sin((rotation-90) * Math.PI / 180.0))+(y+camoffsety));
 			
 			if(!((Arena) screen).detectCollision(px, py, width, height, this)){
-				x = (px);
-				y = (py);
+				x = (px-camoffsetx);
+				y = (py-camoffsety);
 			}
 			
 		}
 		if(screen.getScreenFactory().getGame().getKeyboardListener().isKeyPressed(KeyEvent.VK_S)){
-			float px = (x+150)-(float) ((1 * Math.cos((rotation-90) * Math.PI / 180.0)));
-			float py = (y+100)-(float) ((1 * Math.sin((rotation-90) * Math.PI / 180.0)));
+			float px = (x+camoffsetx)-(float) ((1 * Math.cos((rotation-90) * Math.PI / 180.0)));
+			float py = (y+camoffsety)-(float) ((1 * Math.sin((rotation-90) * Math.PI / 180.0)));
 			if(!((Arena) screen).detectCollision(px, py, width, height, this)){
-				x = (px-150);
-				y = (py-100);
+				x = (px-camoffsetx);
+				y = (py-camoffsety);
 			}
 		}
 		if(screen.getScreenFactory().getGame().getKeyboardListener().isKeyPressed(KeyEvent.VK_A)){
