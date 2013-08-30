@@ -25,7 +25,7 @@ public class Arena extends Screen {
 	public boolean debug = false;
 	public boolean pause = false;
 	public Player player = new Player(this, PlayerT.Normal);
-	public Map map = new Map("C:\\Users\\Samuel\\Desktop\\testmap", screenfactory.getGame());
+	public Map map = new Map("C:\\Users\\108147\\Desktop\\testmap", screenfactory.getGame());
 	
 	public Arena(ScreenFactory screenfactory) {
 		super(screenfactory);
@@ -112,7 +112,7 @@ public class Arena extends Screen {
 				y = rand.nextInt(230-30);
 				e = new Zombie(this, x, y, rand.nextInt(360), ZType.normal);
 			}
-			//this.addEntity(e);
+			this.addEntity(e);
 			
 			this.numofzombies++;
 			System.out.println("New Zombie");
@@ -139,7 +139,7 @@ public class Arena extends Screen {
 			player.poffsetX = (int) player.CamX;
 		}else if(player.CamX+screenfactory.getGame().getWindow().getWidth() >= map.width){
 			camera.x = map.width-screenfactory.getGame().getWindow().getWidth();
-			player.poffsetX = (int) player.CamX;
+			player.poffsetX = (int) player.CamX-screenfactory.getGame().getWindow().getWidth();
 		}else{
 			player.poffsetX = 0;
 		}
@@ -149,7 +149,7 @@ public class Arena extends Screen {
 			player.poffsetY = (int) player.CamY;
 		}else if(player.CamY+screenfactory.getGame().getWindow().getHeight() >= map.height){
 			camera.y = map.height-screenfactory.getGame().getWindow().getHeight();
-			player.poffsetY = (int) player.CamY;
+			player.poffsetY = (int) player.CamY - screenfactory.getGame().getWindow().getHeight();
 		}else{
 			player.poffsetY = 0;
 		}

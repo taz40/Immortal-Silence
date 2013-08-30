@@ -108,7 +108,7 @@ public class Player extends EntityLiving {
 		}
 		if(screen.getScreenFactory().getGame().getMousePadListener().isMousePressed()){
 			if(CurWep == Weapon.Pistol){
-				screen.addEntity(new Shot(screen, x+8, y+8, rotation, Textures.pistolShot, this));
+				screen.addEntity(new Shot(screen, (x+8)-(x-150)-camoffsetx, (y+8)-(y-100)-camoffsety, rotation, Textures.pistolShot, this));
 				screen.getScreenFactory().getGame().getMousePadListener().clickDone();
 			}
 		}
