@@ -16,7 +16,8 @@ import taz40.lightsoutgamingengine.V1.TextureRenderer;
 public class Arena extends Screen {
 
 	public int numofzombies = 0;
-	public int maxzombies = 5;
+	public Map map = new Map("C:\\Users\\Samuel\\Desktop\\testmap", screenfactory.getGame());
+	public int maxzombies = map.zombiesatonetime;
 	public Camera camera = new Camera(this, 0, 0, screenfactory.getGame().getWindow().getWidth(), screenfactory.getGame().getWindow().getHeight(), 0);
 	public int fps;
 	Timer t = new Timer();
@@ -25,7 +26,6 @@ public class Arena extends Screen {
 	public boolean debug = false;
 	public boolean pause = false;
 	public Player player = new Player(this, PlayerT.Normal);
-	public Map map = new Map("C:\\Users\\108147\\Desktop\\testmap", screenfactory.getGame());
 	
 	public Arena(ScreenFactory screenfactory) {
 		super(screenfactory);
@@ -102,8 +102,8 @@ public class Arena extends Screen {
 		
 		if(!(numofzombies >= maxzombies)){
 		Random rand = new Random();
-		int random = rand.nextInt(101)+1;
-		if(random <= 1){
+		double random = rand.nextDouble();
+		if(random <= map.zobiechance){
 			int x = rand.nextInt(390-30);
 			int y = rand.nextInt(230-30);
 			Entity e = new Zombie(this, x, y, rand.nextInt(360), ZType.normal);
@@ -112,7 +112,7 @@ public class Arena extends Screen {
 				y = rand.nextInt(230-30);
 				e = new Zombie(this, x, y, rand.nextInt(360), ZType.normal);
 			}
-			this.addEntity(e);
+			//this.addEntity(e);
 			
 			this.numofzombies++;
 			System.out.println("New Zombie");
@@ -138,6 +138,7 @@ public class Arena extends Screen {
 			camera.x = 0;
 			player.poffsetX = (int) player.CamX;
 		}else if(player.CamX+screenfactory.getGame().getWindow().getWidth() >= map.width){
+			System.out.println((player.CamX+screenfactory.getGame().getWindow().getWidth()));
 			camera.x = map.width-screenfactory.getGame().getWindow().getWidth();
 			player.poffsetX = (int) player.CamX-screenfactory.getGame().getWindow().getWidth();
 		}else{
@@ -176,6 +177,18 @@ public class Arena extends Screen {
 					}
 				}
 			}
+		}
+		if(x < 0){
+			return true;
+		}
+		if(x+width >= map.width){
+			return true;
+		}
+		if(y < 0){
+			return true;
+		}
+		if(y+height >= map.height){
+			return true;
 		}
 		return false;
 	}

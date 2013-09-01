@@ -26,8 +26,8 @@ public class Player extends EntityLiving {
 	
 
 
-	public int camoffsetx = 200;
-	public int camoffsety = 150;
+	public int camoffsetx = 400;
+	public int camoffsety = 300;
 	int CamX = 0;
 	int CamY = 0;
 	Point image = new Point();
@@ -57,7 +57,7 @@ public class Player extends EntityLiving {
 	public void onCustomDraw(Graphics2D g) {
 		// TODO Auto-generated method stub
 		if(CurWep == Weapon.Pistol){
-			TextureRenderer.DrawSprite(Textures.redplayerPistol, (int)(x-(x-150))+poffsetX, (int)(y-(y-100))+poffsetY, 2, rotation, g);
+			TextureRenderer.DrawSprite(Textures.redplayerPistol, (int)(x-(x-camoffsetx))+poffsetX, (int)(y-(y-camoffsety))+poffsetY, 2, rotation, g);
 		}else{
 			TextureRenderer.DrawSprite(Textures.redplayeridle, Math.round(0), Math.round(0), 2, rotation, g);
 		}
@@ -83,21 +83,21 @@ public class Player extends EntityLiving {
 		CamX = (int) (x-camoffsetx);
 		CamY = (int) (y-camoffsety);
 		if(screen.getScreenFactory().getGame().getKeyboardListener().isKeyPressed(KeyEvent.VK_W)){
-			float px = (float) ((1 * Math.cos((rotation-90) * Math.PI / 180.0))+(x+camoffsetx));
-			float py = (float) ((1 * Math.sin((rotation-90) * Math.PI / 180.0))+(y+camoffsety));
+			float px = (float) ((1 * Math.cos((rotation-90) * Math.PI / 180.0))+(x));
+			float py = (float) ((1 * Math.sin((rotation-90) * Math.PI / 180.0))+(y));
 			
 			if(!((Arena) screen).detectCollision(px, py, width, height, this)){
-				x = (px-camoffsetx);
-				y = (py-camoffsety);
+				x = (px);
+				y = (py);
 			}
 			
 		}
 		if(screen.getScreenFactory().getGame().getKeyboardListener().isKeyPressed(KeyEvent.VK_S)){
-			float px = (x+camoffsetx)-(float) ((1 * Math.cos((rotation-90) * Math.PI / 180.0)));
-			float py = (y+camoffsety)-(float) ((1 * Math.sin((rotation-90) * Math.PI / 180.0)));
+			float px = (x)-(float) ((1 * Math.cos((rotation-90) * Math.PI / 180.0)));
+			float py = (y)-(float) ((1 * Math.sin((rotation-90) * Math.PI / 180.0)));
 			if(!((Arena) screen).detectCollision(px, py, width, height, this)){
-				x = (px-camoffsetx);
-				y = (py-camoffsety);
+				x = (px);
+				y = (py);
 			}
 		}
 		if(screen.getScreenFactory().getGame().getKeyboardListener().isKeyPressed(KeyEvent.VK_A)){
@@ -108,7 +108,7 @@ public class Player extends EntityLiving {
 		}
 		if(screen.getScreenFactory().getGame().getMousePadListener().isMousePressed()){
 			if(CurWep == Weapon.Pistol){
-				screen.addEntity(new Shot(screen, (x+8)-(x-150)-camoffsetx, (y+8)-(y-100)-camoffsety, rotation, Textures.pistolShot, this));
+				screen.addEntity(new Shot(screen, x+(width/2), y+(height/2), rotation, Textures.pistolShot, this));
 				screen.getScreenFactory().getGame().getMousePadListener().clickDone();
 			}
 		}
