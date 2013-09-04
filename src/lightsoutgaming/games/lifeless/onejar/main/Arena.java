@@ -16,7 +16,7 @@ import taz40.lightsoutgamingengine.V1.TextureRenderer;
 public class Arena extends Screen {
 
 	public int numofzombies = 0;
-	public Map map = new Map("C:\\Users\\Samuel\\Desktop\\testmap", screenfactory.getGame());
+	public Map map = new Map("C:\\Users\\108147\\Desktop\\testmap", screenfactory.getGame());
 	public int maxzombies = map.zombiesatonetime;
 	public Camera camera = new Camera(this, 0, 0, screenfactory.getGame().getWindow().getWidth(), screenfactory.getGame().getWindow().getHeight(), 0);
 	public int fps;
