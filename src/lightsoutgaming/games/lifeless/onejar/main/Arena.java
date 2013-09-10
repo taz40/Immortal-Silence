@@ -16,7 +16,7 @@ import taz40.lightsoutgamingengine.V1.TextureRenderer;
 public class Arena extends Screen {
 
 	public int numofzombies = 0;
-	public Map map = new Map("C:\\Users\\Samuel\\Desktop\\testmap", screenfactory.getGame());
+	public Map map = new Map(System.getProperty("user.home") + "\\Desktop\\testmap", screenfactory.getGame());
 	public int maxzombies = map.zombiesatonetime;
 	public Camera camera = new Camera(this, 0, 0, screenfactory.getGame().getWindow().getWidth(), screenfactory.getGame().getWindow().getHeight(), 0);
 	public int fps;
@@ -78,11 +78,11 @@ public class Arena extends Screen {
 		// TODO Auto-generated method stub
 		g.setColor(Color.DARK_GRAY);
 		g.fillRect(0, 0, screenfactory.getGame().getWindow().getWidth(), screenfactory.getGame().getWindow().getHeight());
+		TextureRenderer.DrawTexture(map.background, (int)(0-camera.x)/2, (int)(0-camera.y)/2, map.width, map.height, g);
 		g.setColor(Color.blue);
 		if(debug){
 			g.drawString("FPS: "+fps, 5, 200);
 		}
-		TextureRenderer.DrawTexture(map.background, (int)(0-camera.x)/2, (int)(0-camera.y)/2, map.width, map.height, g);
 	}
 
 	@Override
