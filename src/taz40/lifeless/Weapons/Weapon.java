@@ -1,7 +1,6 @@
 package taz40.lifeless.Weapons;
 
-import taz40.lifeless.entity.projectile.Projectile;
-import taz40.lifeless.entity.projectile.WizardProjectile;
+import taz40.lifeless.entity.Entity;
 import taz40.lifeless.graphics.Screen;
 import taz40.lifeless.level.Level;
 
@@ -10,12 +9,15 @@ public abstract class Weapon {
 	public int FIRERATE;
 	public int firerate;
 	public Level level;
+	public Entity e;
+	public int dmg = 0;
 	
 	public Weapon(){
 	}
 	
-	public void init(Level level){
+	public void init(Level level, Entity e){
 		this.level = level;
+		this.e = e;
 	}
 	
 	public void update(){

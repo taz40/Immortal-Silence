@@ -7,6 +7,7 @@ import java.util.List;
 
 import taz40.lifeless.Util.Vector2i;
 import taz40.lifeless.entity.Entity;
+import taz40.lifeless.entity.mob.Mob;
 import taz40.lifeless.entity.mob.Player;
 import taz40.lifeless.entity.particle.Particle;
 import taz40.lifeless.entity.projectile.Projectile;
@@ -224,6 +225,18 @@ public class Level {
 			}
 
 		}
+		return result;
+	}
+	
+	public List<Mob> getMobs(Entity e, int radius){
+		List<Entity> entities = getEntities(e, radius);
+		List<Mob> result = new ArrayList<Mob>();
+		for(Entity ent: entities){
+			if(ent instanceof Mob){
+				result.add((Mob) ent);
+			}
+		}
+		
 		return result;
 	}
 

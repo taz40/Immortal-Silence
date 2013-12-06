@@ -15,6 +15,18 @@ public abstract class Mob extends Entity {
 	protected boolean moving = false;
 	public int flip = 0;
 	public Weapon weapon;
+	public int health = 10;
+	
+	public void damage(int dmg){
+		health -= dmg;
+		if(health <= 0){
+			this.remove();
+		}
+	}
+	
+	public void heal(int amt){
+		health += amt;
+	}
 	
 	public void move(double xa, double ya){
 		if(xa != 0 && ya != 0){

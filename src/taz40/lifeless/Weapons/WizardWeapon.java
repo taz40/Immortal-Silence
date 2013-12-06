@@ -14,7 +14,7 @@ public class WizardWeapon extends Weapon {
 	}
 
 	public void shoot(double x, double y, double dir){
-		if(Mouse.getButton() == 1 && firerate <= 0){
+		if(firerate <= 0){
 			Projectile p = new WizardProjectile(x, y, dir);
 			level.add(p);
 			firerate = FIRERATE;

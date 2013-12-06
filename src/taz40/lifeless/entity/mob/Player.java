@@ -1,6 +1,7 @@
 package taz40.lifeless.entity.mob;
 
 import taz40.lifeless.Game;
+import taz40.lifeless.Weapons.Knife;
 import taz40.lifeless.Weapons.WizardWeapon;
 import taz40.lifeless.entity.projectile.Projectile;
 import taz40.lifeless.graphics.AnimatedSprite;
@@ -27,7 +28,7 @@ public class Player extends Mob {
 	
 	public void init(Level level){
 		super.init(level);
-		weapon.init(level);
+		weapon.init(level, this);
 	}
 	
 	public Player(int x, int y, Keyboard input){
@@ -39,7 +40,7 @@ public class Player extends Mob {
 	private void initiate(Keyboard input){
 		this.input = input; 
 		animSprite = down;
-		weapon = new WizardWeapon();
+		weapon = new Knife();
 	}
 	
 	public void update(){
@@ -71,10 +72,12 @@ public class Player extends Mob {
 	}
 
 	private void updateShooting() {
+		if(Mouse.getButton() == 1){
 			double dx = Mouse.getX() - (Game.width*Game.scale)/2;
 			double dy = Mouse.getY() - (Game.height*Game.scale)/2;
 			double dir = Math.atan2(dy, dx);
 			weapon.shoot(x, y, dir);
+		}
 	}
 
 	public void render(Screen screen){

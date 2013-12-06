@@ -15,10 +15,10 @@ public class Chaser extends Mob {
 	private AnimatedSprite right = new AnimatedSprite(SpriteSheet.dummy_right, 32, 32, 3, 7);
 	double speed = 0.8;
 	private AnimatedSprite animSprite = null;
-
 	private int time = 0;
 
 	public Chaser(int x, int y) {
+		health = 50;
 		this.x = x;
 		this.y = y;
 		sprite = up.getSprite();
