@@ -5,16 +5,18 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 
 import javax.swing.JFrame;
 
+import taz40.lifeless.Util.Function;
 import taz40.lifeless.entity.mob.Player;
 import taz40.lifeless.graphics.Screen;
-import taz40.lifeless.graphics.Sprite;
-import taz40.lifeless.graphics.SpriteSheet;
+import taz40.lifeless.graphics.GUI.Button;
+import taz40.lifeless.graphics.GUI.Menu;
 import taz40.lifeless.input.Keyboard;
 import taz40.lifeless.input.Mouse;
 import taz40.lifeless.level.Level;
@@ -26,7 +28,9 @@ public class Game extends Canvas implements Runnable {
 	public static int width = 300;
 	public static int height = width / 16 * 9;
 	public static int scale = 3;
-
+	protected boolean menu = true;
+	private Menu MainMenu = new Menu("LifeLess");
+	private Menu curMenu = MainMenu;
 	private Thread thread;
 	private JFrame frame;
 	private Keyboard key;
@@ -55,6 +59,41 @@ public class Game extends Canvas implements Runnable {
 		Mouse mouse = new Mouse();
 		addMouseListener(mouse);
 		addMouseMotionListener(mouse);
+		
+		MainMenu.add(new Button("SinglePlayer", 0, 50, 300, 16, 185, 0, 3, new Function(){
+
+			@Override
+			public void run() {
+				menu = false;
+			}
+			
+		}));
+		MainMenu.add(new Button("MultiPlayer", 0, 70, 300, 16, 185, 0, 3, new Function(){
+
+			@Override
+			public void run() {
+				MainMenu.notavalable = true;
+				//do multiplayer things here
+			}
+			
+		}));
+		MainMenu.add(new Button("Exit", 0, 90, 300, 16, 185, 0, 3, new Function(){
+
+			@Override
+			public void run() {
+				stop();
+				frame.dispose();
+			}
+			
+		}));
+	}
+	
+	public void renderMenu(Graphics g){
+		curMenu.render(g);
+	}
+	
+	public void updateMenu(){
+		curMenu.update();
 	}
 
 	public synchronized void start() {
@@ -106,12 +145,18 @@ public class Game extends Canvas implements Runnable {
 				frames = 0;
 			}
 		}
-		stop();
 	}
 
 	public void update() {
-		key.update();
-		level.update();
+		if(menu){
+			updateMenu();
+		}else{
+			key.update();
+			level.update();
+			if(key.isKeyPressed(KeyEvent.VK_ESCAPE)){
+				menu = true;
+			}
+		}
 	}
 
 	public void render() {
@@ -121,18 +166,23 @@ public class Game extends Canvas implements Runnable {
 			return;
 		}
 		screen.clear();
+		Graphics g = bs.getDrawGraphics();
+		
+		if(!menu){
 		double xScroll = player.x - screen.width / 2;
 		double yScroll = player.y - screen.height / 2;
 		level.render((int) xScroll, (int) yScroll, screen);
-		
+		}
 		for (int i = 0; i < pixels.length; i++) {
 			pixels[i] = screen.pixels[i];
 		}
-
-		Graphics g = bs.getDrawGraphics();
+		
 		g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
 		g.setColor(Color.white);
 		g.setFont(new Font("Verdana", 0, 50));
+		if(menu){
+			renderMenu(g);
+		}
 		//g.fillRect(Mouse.getX() - 32, Mouse.getY() - 32, 64, 64);
 		//if(Mouse.getButton() != -1) g.drawString("Button: " + Mouse.getButton(), 80, 80);
 		g.dispose();
