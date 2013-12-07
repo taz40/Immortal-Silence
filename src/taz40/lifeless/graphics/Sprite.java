@@ -31,6 +31,7 @@ public class Sprite {
 	
 	// Particles
 	public static Sprite particle_normal = new Sprite(3, 0xAAAAAA);
+	public static Sprite particle_blood = new Sprite(3, 0xFF0000);
 	
 	protected Sprite(SpriteSheet sheet, int width, int height){
 		if(width == height) SIZE = width;

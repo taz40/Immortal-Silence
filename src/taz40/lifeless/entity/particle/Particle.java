@@ -9,7 +9,7 @@ import taz40.lifeless.graphics.Sprite;
 
 public class Particle extends Entity {
 
-	private Sprite sprite;
+	protected Sprite sprite;
 	
 	private int life;
 	private int time = 0;

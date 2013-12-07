@@ -40,7 +40,7 @@ public class Player extends Mob {
 	private void initiate(Keyboard input){
 		this.input = input; 
 		animSprite = down;
-		weapon = new Knife();
+		weapon = new WizardWeapon();
 	}
 	
 	public void update(){
