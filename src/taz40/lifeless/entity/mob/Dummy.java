@@ -20,6 +20,7 @@ public class Dummy extends Mob {
 	public Dummy(int x, int y){
 		this.x = x;
 		this.y = y;
+		health = 40;
 		animSprite = up;
 		animSprite.setFrame(0);
 		sprite = animSprite.getSprite();

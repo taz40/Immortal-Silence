@@ -35,6 +35,21 @@ public abstract class Projectile extends Entity {
 		return false;
 	}
 	
+	protected boolean collition(int size, List<Mob> alreadyhit){
+		List<Mob> mobs = level.getMobs(this, size);
+		boolean result = false;
+		if(mobs.size() > 0){
+			for(int i = 0; i < mobs.size(); i++){
+				mobs.get(i).damage((int)dmg);
+				if(!alreadyhit.contains(mobs.get(i))){
+					result = true;
+					alreadyhit.add(mobs.get(i));
+				}
+			}
+		}
+		return result;
+	}
+	
 	protected void move(){
 		while(xa != 0){
 			if(Math.abs(xa) > 1){

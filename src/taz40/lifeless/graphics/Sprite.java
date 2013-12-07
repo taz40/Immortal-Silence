@@ -39,6 +39,8 @@ public class Sprite {
 		this.sheet = sheet;
 		this.width = width;
 		this.height = height;
+		pixels = new int[width*height];
+		load();
 	}
 	
 	public Sprite(int width, int height, int color){
@@ -83,9 +85,9 @@ public class Sprite {
 	}
 
 	private void load(){
-		for(int y = 0; y < SIZE; y++){
-			for(int x = 0; x < SIZE; x++){
-				pixels[x+y*SIZE] = sheet.pixels[(x + this.x) + (y + this.y) * sheet.SIZE];
+		for(int y = 0; y < height; y++){
+			for(int x = 0; x < width; x++){
+				pixels[x+y*width] = sheet.pixels[(x + this.x) + (y + this.y) * sheet.WIDTH];
 			}
 		}
 	}

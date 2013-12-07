@@ -28,7 +28,13 @@ public class SpawnLevel extends Level {
 			System.err.println("Could not load level file!");
 		}
 		TileCoordinate dummyspawn = new TileCoordinate(20, 53);
-			add(new Chaser(dummyspawn.x(), dummyspawn.y()));
+		for(int i = 0; i < 10; i++){
+			add(new Dummy(dummyspawn.x(), dummyspawn.y()));
+		}
+		dummyspawn = new TileCoordinate(20, 43);
+		add(new Chaser(dummyspawn.x(), dummyspawn.y()));
+		dummyspawn = new TileCoordinate(15, 53);
+		add(new Chaser(dummyspawn.x(), dummyspawn.y()));
 	}
 	
 

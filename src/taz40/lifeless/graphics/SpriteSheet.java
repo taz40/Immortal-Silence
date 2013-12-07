@@ -13,18 +13,18 @@ public class SpriteSheet {
 	public int[] pixels;
 	
 	public static SpriteSheet tiles = new SpriteSheet("/Textures/spritesheet.png", 256);
-	public static SpriteSheet spawn_level = new SpriteSheet("/textures/spawn_level.png", 48);
-	public static SpriteSheet projectile_wizard = new SpriteSheet("/textures/projectiles/wizard.png", 48);
+	public static SpriteSheet spawn_level = new SpriteSheet("/Textures/spawn_level.png", 48);
+	public static SpriteSheet projectile_wizard = new SpriteSheet("/Textures/projectiles/wizard.png", 48);
 	
-	public static SpriteSheet player = new SpriteSheet("/textures/player_sheet.png", 96);
+	public static SpriteSheet player = new SpriteSheet("/Textures/player_sheet.png", 96);
 	public static SpriteSheet player_down = new SpriteSheet(player, 0, 0, 1, 3, 32);
 	public static SpriteSheet player_right = new SpriteSheet(player, 1, 0, 1, 3, 32);
 	public static SpriteSheet player_up = new SpriteSheet(player, 2, 0, 1, 3, 32);
 	
-	public static SpriteSheet Axe = new SpriteSheet("/textures/projectiles/axe.png", 16, 64);
+	public static SpriteSheet Axe = new SpriteSheet("/Textures/projectiles/axe.png", 16, 64);
 	public static SpriteSheet AxeAim = new SpriteSheet(Axe, 0, 0, 1, 4, 16);
 	
-	public static SpriteSheet dummy = new SpriteSheet("/textures/player_sheet.png", 96);
+	public static SpriteSheet dummy = new SpriteSheet("/Textures/player_sheet.png", 96);
 	public static SpriteSheet dummy_down = new SpriteSheet(dummy, 0, 0, 1, 3, 32);
 	public static SpriteSheet dummy_right = new SpriteSheet(dummy, 1, 0, 1, 3, 32);
 	public static SpriteSheet dummy_up = new SpriteSheet(dummy, 2, 0, 1, 3, 32);

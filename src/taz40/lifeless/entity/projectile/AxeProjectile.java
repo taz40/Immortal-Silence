@@ -1,5 +1,10 @@
 package taz40.lifeless.entity.projectile;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import taz40.lifeless.entity.mob.Mob;
 import taz40.lifeless.entity.spawner.BloodSpawner;
 import taz40.lifeless.entity.spawner.ParticleSpawner;
 import taz40.lifeless.graphics.AnimatedSprite;
@@ -11,6 +16,7 @@ public class AxeProjectile extends Projectile {
 
 	public double velx, vely;
 	public AnimatedSprite Anim = new AnimatedSprite(SpriteSheet.AxeAim, 16, 16, 4, 7);
+	public List<Mob> alreadyhit = new ArrayList<Mob>();
 	
 	public AxeProjectile(double x, double y, double dir) {
 		super(x, y, dir);
@@ -32,9 +38,13 @@ public class AxeProjectile extends Projectile {
 			level.add(new ParticleSpawner((int)x, (int)y, 44, 50, level));
 			remove();
 		}
-		if(collition(20)){
+		if(collition(20, alreadyhit)){
 			level.add(new BloodSpawner((int)x, (int)y, 50, level));
-			remove();
+			if(new Random().nextInt(4) == 0){
+				
+			}else{
+				remove();
+			}
 		}
 		Anim.update();
 		move();
