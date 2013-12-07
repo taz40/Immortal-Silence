@@ -13,7 +13,7 @@ public class Chaser extends Mob {
 	private AnimatedSprite down = new AnimatedSprite(SpriteSheet.dummy_down, 32, 32, 3, 7);
 	private AnimatedSprite up = new AnimatedSprite(SpriteSheet.dummy_up, 32, 32, 3, 7);
 	private AnimatedSprite right = new AnimatedSprite(SpriteSheet.dummy_right, 32, 32, 3, 7);
-	double speed = 0.8;
+	double speed = 0.4;
 	private AnimatedSprite animSprite = null;
 	private int time = 0;
 

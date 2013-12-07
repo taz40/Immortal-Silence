@@ -10,7 +10,6 @@ public class WizardWeapon extends Weapon {
 	
 	public WizardWeapon() {
 		FIRERATE = 10;
-		firerate = FIRERATE;
 	}
 
 	public void shoot(double x, double y, double dir){

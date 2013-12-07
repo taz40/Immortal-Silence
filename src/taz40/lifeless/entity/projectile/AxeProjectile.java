@@ -1,28 +1,31 @@
 package taz40.lifeless.entity.projectile;
 
-import java.util.Random;
-
 import taz40.lifeless.entity.spawner.BloodSpawner;
 import taz40.lifeless.entity.spawner.ParticleSpawner;
-import taz40.lifeless.entity.spawner.Spawner;
+import taz40.lifeless.graphics.AnimatedSprite;
 import taz40.lifeless.graphics.Screen;
 import taz40.lifeless.graphics.Sprite;
+import taz40.lifeless.graphics.SpriteSheet;
 
-public class WizardProjectile extends Projectile {
+public class AxeProjectile extends Projectile {
 
-	protected final Random random = new Random();
-	protected double velx, vely;
-	public WizardProjectile(double x, double y, double dir) {
+	public double velx, vely;
+	public AnimatedSprite Anim = new AnimatedSprite(SpriteSheet.AxeAim, 16, 16, 4, 7);
+	
+	public AxeProjectile(double x, double y, double dir) {
 		super(x, y, dir);
+
 		range = 200;
-		dmg = 20;
+		dmg = 50;
 		speed = 4;
 		sprite = Sprite.projectile_wizard;
 		velx = speed * Math.cos(angle);
 		vely = speed * Math.sin(angle);
 	}
-	
-	public void update(){
+
+	@Override
+	public void update() {
+		// TODO Auto-generated method stub
 		xa = velx;
 		ya = vely;
 		if(level.tileCollision((int)(x+xa), (int)(y+ya), 8, 4, 4)){
@@ -33,11 +36,12 @@ public class WizardProjectile extends Projectile {
 			level.add(new BloodSpawner((int)x, (int)y, 50, level));
 			remove();
 		}
-
+		Anim.update();
 		move();
 	}
-
+	
 	public void render(Screen screen){
+		sprite = Anim.getSprite();
 		screen.renderProjectile((int) x, (int) y, this);
 	}
 

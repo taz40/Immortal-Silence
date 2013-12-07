@@ -14,7 +14,8 @@ public abstract class Mob extends Entity {
 	protected int dir = 0;
 	protected boolean moving = false;
 	public int flip = 0;
-	public Weapon weapon;
+	public Weapon primary;
+	public Weapon secondary;
 	public int health = 10;
 	
 	public void damage(int dmg){

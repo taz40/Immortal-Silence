@@ -10,7 +10,6 @@ import taz40.lifeless.graphics.Sprite;
 public abstract class Projectile extends Entity {
 
 	protected final double xOrigin, yOrigin;
-	protected double x, y;
 	protected double angle;
 	protected Sprite sprite;
 	protected double xa, ya;

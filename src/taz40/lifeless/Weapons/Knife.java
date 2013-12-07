@@ -11,7 +11,7 @@ public class Knife extends Weapon {
 
 	public void init(Level level, Entity e){
 		super.init(level, e);
-		FIRERATE = 5;
+		FIRERATE = 15;
 		firerate = FIRERATE;
 		dmg = 2;
 	}
@@ -23,7 +23,7 @@ public class Knife extends Weapon {
 			if(mobs.size() > 0){
 				for(int i = 0; i < mobs.size(); i++){
 					mobs.get(i).damage(dmg);
-					level.add(new BloodSpawner((int)mobs.get(i).x, (int)mobs.get(i).y, 44, 50, level));
+					level.add(new BloodSpawner((int)mobs.get(i).x, (int)mobs.get(i).y, 70, level));
 				}
 			}
 			firerate = FIRERATE;

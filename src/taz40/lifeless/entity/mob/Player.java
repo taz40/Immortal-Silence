@@ -1,8 +1,8 @@
 package taz40.lifeless.entity.mob;
 
 import taz40.lifeless.Game;
-import taz40.lifeless.Weapons.Knife;
-import taz40.lifeless.Weapons.WizardWeapon;
+import taz40.lifeless.Weapons.Axe;
+import taz40.lifeless.Weapons.Sword;
 import taz40.lifeless.entity.projectile.Projectile;
 import taz40.lifeless.graphics.AnimatedSprite;
 import taz40.lifeless.graphics.Screen;
@@ -28,7 +28,8 @@ public class Player extends Mob {
 	
 	public void init(Level level){
 		super.init(level);
-		weapon.init(level, this);
+		primary.init(level, this);
+		secondary.init(level, this);
 	}
 	
 	public Player(int x, int y, Keyboard input){
@@ -40,15 +41,17 @@ public class Player extends Mob {
 	private void initiate(Keyboard input){
 		this.input = input; 
 		animSprite = down;
-		weapon = new WizardWeapon();
+		primary = new Sword();
+		secondary = new Axe();
 	}
 	
 	public void update(){
-		weapon.update();
+		primary.update();
+		secondary.update();
 		if(walking) animSprite.update();
 		else animSprite.setFrame(0);
 		double xa=0,ya=0;
-		double speed = 1;
+		double speed = 0.7;
 		if(input.up) ya -= speed;
 		if(input.down) ya += speed;
 		if(input.right) xa += speed;
@@ -76,7 +79,13 @@ public class Player extends Mob {
 			double dx = Mouse.getX() - (Game.width*Game.scale)/2;
 			double dy = Mouse.getY() - (Game.height*Game.scale)/2;
 			double dir = Math.atan2(dy, dx);
-			weapon.shoot(x, y, dir);
+			primary.shoot(x, y, dir);
+		}
+		if(Mouse.getButton() == 3){
+			double dx = Mouse.getX() - (Game.width*Game.scale)/2;
+			double dy = Mouse.getY() - (Game.height*Game.scale)/2;
+			double dir = Math.atan2(dy, dx);
+			secondary.shoot(x, y, dir);
 		}
 	}
 
@@ -97,7 +106,8 @@ public class Player extends Mob {
 		}
 		sprite = animSprite.getSprite();
 		screen.renderMob((int)(x - 16),(int) (y - 16), sprite, flip);
-		weapon.render(screen);
+		primary.render(screen);
+		secondary.render(screen);
 	}
 	
 }

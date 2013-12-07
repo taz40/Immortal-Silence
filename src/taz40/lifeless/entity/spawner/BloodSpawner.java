@@ -9,9 +9,9 @@ public class BloodSpawner extends Spawner {
 
 	private int life;
 	
-	public BloodSpawner(int x, int y, int life, int amount, Level level) {
+	public BloodSpawner(int x, int y, int amount, Level level) {
 		super(x, y, Type.PARTICLE, amount, level);
-		this.life = life;
+		this.life = 60;
 		for(int i = 0; i < amount; i++){
 				level.add(new BloodParticle(x, y, life));
 		}
