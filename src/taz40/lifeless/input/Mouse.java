@@ -21,6 +21,10 @@ public class Mouse implements MouseListener, MouseMotionListener {
 		return mouseB;
 	}
 	
+	public static void resetButton(){
+		mouseB = -1;
+	}
+	
 	public void mouseDragged(MouseEvent e) {
 		mouseMoved(e);
 	}

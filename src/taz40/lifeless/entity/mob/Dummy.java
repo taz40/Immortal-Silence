@@ -27,6 +27,7 @@ public class Dummy extends Mob {
 	}
 	
 	public void render(Screen screen){
+		flip = 0;
 		if(dir == 0) {
 			animSprite = up;
 		}

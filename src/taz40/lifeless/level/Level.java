@@ -7,6 +7,8 @@ import java.util.List;
 
 import taz40.lifeless.Util.Vector2i;
 import taz40.lifeless.entity.Entity;
+import taz40.lifeless.entity.mob.Chaser;
+import taz40.lifeless.entity.mob.Dummy;
 import taz40.lifeless.entity.mob.Mob;
 import taz40.lifeless.entity.mob.Player;
 import taz40.lifeless.entity.particle.Particle;
@@ -35,7 +37,7 @@ public class Level {
 	};
 
 	public static Level spawn = new SpawnLevel("/Levels/spawn.png");
-
+	
 	public Level(int width, int height) {
 		this.width = width;
 		this.height = height;
@@ -269,6 +271,13 @@ public class Level {
 		if (tiles[x + y * width] == Tile.col_spawn_hedge) return Tile.spawn_hedge;
 		if (tiles[x + y * width] == Tile.col_spawn_water) return Tile.spawn_water;
 		return Tile.voidTile;
+	}
+	
+	public void clear(){
+		this.entities.clear();
+		this.particles.clear();
+		this.projectiles.clear();
+		this.players.clear();
 	}
 
 }

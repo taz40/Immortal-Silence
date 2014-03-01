@@ -22,6 +22,7 @@ public class Chaser extends Mob {
 		this.x = x;
 		this.y = y;
 		sprite = up.getSprite();
+		animSprite = up;
 	}
 
 	public void render(Screen screen) {

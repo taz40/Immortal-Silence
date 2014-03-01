@@ -9,6 +9,7 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.util.Scanner;
 
 import javax.swing.JFrame;
 
@@ -24,7 +25,7 @@ import taz40.lifeless.level.TileCoordinate;
 
 public class Game extends Canvas implements Runnable {
 
-	private static final long serialVersionUID = 1L;
+	protected static final long serialVersionUID = 1L;
 	public static int width = 300;
 	public static int height = width / 16 * 9;
 	public static int scale = 3;
@@ -32,14 +33,14 @@ public class Game extends Canvas implements Runnable {
 	private Menu MainMenu = new Menu("LifeLess");
 	private Menu curMenu = MainMenu;
 	private Thread thread;
-	private JFrame frame;
-	private Keyboard key;
-	private Level level;
-	private Player player;
+	protected JFrame frame;
+	protected Keyboard key;
+	protected Level level;
+	protected Player player;
 	private boolean running = false;
 	private String title = "LifeLess";
 
-	private Screen screen;
+	protected Screen screen;
 
 	private BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 	private int[] pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
@@ -51,6 +52,7 @@ public class Game extends Canvas implements Runnable {
 		frame = new JFrame();
 		key = new Keyboard();
 		level = Level.spawn;
+		level.clear();
 		TileCoordinate playerspawn = new TileCoordinate(20, 36);
 		player = new Player(playerspawn.x(), playerspawn.y(), key);
 		level.add(player);
@@ -59,12 +61,22 @@ public class Game extends Canvas implements Runnable {
 		Mouse mouse = new Mouse();
 		addMouseListener(mouse);
 		addMouseMotionListener(mouse);
-		
 		MainMenu.add(new Button("SinglePlayer", 0, 50, 300, 16, 185, 0, 3, new Function(){
 
 			@Override
 			public void run() {
-				menu = false;
+				stop();
+				frame.dispose();
+				Game game = new Game();
+				game.frame.setResizable(false);
+				game.frame.setTitle(game.title);
+				game.frame.add(game);
+				game.frame.pack();
+				game.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				game.frame.setLocationRelativeTo(null);
+				game.frame.setVisible(true);
+				game.menu = false;
+				game.start();
 			}
 			
 		}));
@@ -72,8 +84,22 @@ public class Game extends Canvas implements Runnable {
 
 			@Override
 			public void run() {
-				MainMenu.notavalable = true;
-				//do multiplayer things here
+				stop();
+				frame.dispose();
+				menu = false;
+				Scanner s = new Scanner(System.in);
+				String ip = s.nextLine();
+				int port = s.nextInt();
+				Game game = new GameMP("test", ip, port);
+				game.frame.setResizable(false);
+				game.frame.setTitle(game.title);
+				game.frame.add(game);
+				game.frame.pack();
+				game.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				game.frame.setLocationRelativeTo(null);
+				game.frame.setVisible(true);
+
+				game.start();
 			}
 			
 		}));
@@ -139,7 +165,7 @@ public class Game extends Canvas implements Runnable {
 
 			if (System.currentTimeMillis() - timer >= 1000) {
 				timer += 1000;
-				System.out.println(updates + " ups, " + frames + " fps");
+				//System.out.println(updates + " ups, " + frames + " fps");
 				frame.setTitle(title + " - " + updates + " ups, " + frames + " fps");
 				updates = 0;
 				frames = 0;
