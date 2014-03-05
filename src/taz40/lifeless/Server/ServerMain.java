@@ -4,14 +4,10 @@ public class ServerMain {
 
 	public static void main(String[] args){
 		if(args.length == 1){
-			new ServerMain(Integer.parseInt(args[0]));
+			new Server(Integer.parseInt(args[0]));
 		}else{
-			new ServerMain(1337);
+			new Server(1337);
 		}
-	}
-	
-	public ServerMain(int port){
-		
 	}
 	
 }

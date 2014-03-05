@@ -1,6 +1,7 @@
 package taz40.lifeless;
 
 import java.awt.Dimension;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -22,6 +23,7 @@ public class GameMP extends Game {
 	private InetAddress ip;
 	private String name, address;
 	private int port;
+	private int ID;
 	
 	public GameMP(String name1, String address1, int port1){
 		super();
@@ -39,6 +41,38 @@ public class GameMP extends Game {
 	
 	private void failed(){
 		menu = true;
+	}
+	
+	public void update() {
+		if(menu){
+			updateMenu();
+		}else{
+			key.update();
+			level.update();
+			if(key.isKeyPressed(KeyEvent.VK_ESCAPE)){
+				menu = true;
+			}
+		}
+	}
+	
+	public void recvLoop(){
+		Thread recieveLoop = new Thread("Receive Loop"){
+			public void run(){
+				while(running){
+					String string = receive();
+					process(string);
+				}
+			}
+		};
+	}
+	
+	public void process(String string){
+		if(string.startsWith("/u/")){
+			String msg = "/u/"+ID+"/"+this.player.x+"/"+this.player.y;
+			send(msg);
+		}else if(string.startsWith("/i/")){
+			
+		}
 	}
 	
 	private void success(){
@@ -64,10 +98,12 @@ public class GameMP extends Game {
 			socket = new DatagramSocket();
 			ip = InetAddress.getByName(address);
 			String msg = "/c/" + name;
-			this.send(msg.getBytes());
+			this.send(msg);
 			String data = receive();
 			if( data == "false" ){
 				return false;
+			}else{
+				ID = Integer.parseInt(data.split("/c/")[1]);
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -89,13 +125,14 @@ public class GameMP extends Game {
 		}
 		
 		String message = new String(packet.getData());
-		return message;
+		return message.split("/e/")[0];
 	}
 	
-	private void send(final byte[] data){
+	private void send(String s){
+		final String string = s + "/e/";
 		send = new Thread("Send"){
 			public void run(){
-				DatagramPacket packet = new DatagramPacket(data, data.length, ip, port);
+				DatagramPacket packet = new DatagramPacket(string.getBytes(), string.getBytes().length, ip, port);
 				try {
 					socket.send(packet);
 				} catch (IOException e) {

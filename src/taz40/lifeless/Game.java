@@ -37,15 +37,17 @@ public class Game extends Canvas implements Runnable {
 	protected Keyboard key;
 	protected Level level;
 	protected Player player;
-	private boolean running = false;
+	protected boolean running = false;
 	private String title = "LifeLess";
 
 	protected Screen screen;
 
 	private BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 	private int[] pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
-
+	final String name;
+	
 	public Game() {
+		name = new Scanner(System.in).nextLine();
 		Dimension size = new Dimension(width * scale, height * scale);
 		setPreferredSize(size);
 		screen = new Screen(width, height);
@@ -90,7 +92,7 @@ public class Game extends Canvas implements Runnable {
 				Scanner s = new Scanner(System.in);
 				String ip = s.nextLine();
 				int port = s.nextInt();
-				Game game = new GameMP("test", ip, port);
+				Game game = new GameMP(name, ip, port);
 				game.frame.setResizable(false);
 				game.frame.setTitle(game.title);
 				game.frame.add(game);
