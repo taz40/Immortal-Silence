@@ -182,7 +182,18 @@ public class Game extends Canvas implements Runnable {
 			key.update();
 			level.update();
 			if(key.isKeyPressed(KeyEvent.VK_ESCAPE)){
-				menu = true;
+				stop();
+				frame.dispose();
+				Game game = new Game();
+				game.frame.setResizable(false);
+				game.frame.setTitle(game.title);
+				game.frame.add(game);
+				game.frame.pack();
+				game.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				game.frame.setLocationRelativeTo(null);
+				game.frame.setVisible(true);
+				game.menu = true;
+				game.start();
 			}
 		}
 	}

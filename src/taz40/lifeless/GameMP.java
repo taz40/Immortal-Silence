@@ -64,11 +64,12 @@ public class GameMP extends Game {
 				}
 			}
 		};
+		recieveLoop.start();
 	}
 	
 	public void process(String string){
 		if(string.startsWith("/u/")){
-			String msg = "/u/"+ID+"/"+this.player.x+"/"+this.player.y;
+			String msg = "/u/"+name +"/"+ID+"/"+(int)(this.player.x)+"/"+(int)(this.player.y);
 			send(msg);
 		}else if(string.startsWith("/i/")){
 			
@@ -91,6 +92,8 @@ public class GameMP extends Game {
 		Mouse mouse = new Mouse();
 		addMouseListener(mouse);
 		addMouseMotionListener(mouse);
+		running = true;
+		recvLoop();
 	}
 	
 	private boolean openConnection(String address){

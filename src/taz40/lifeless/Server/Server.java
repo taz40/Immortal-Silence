@@ -19,6 +19,8 @@ public class Server implements Runnable {
 	boolean running;
 	private int time = 0;
 	private List<ServerClient> clients = new ArrayList<ServerClient>();
+	private List<Integer> responses = new ArrayList<Integer>();
+	private final int MAX_ATTEMPTS = 5;
 	
 	private String recv(){
 		byte[] data = new byte[1024];
@@ -84,10 +86,39 @@ public class Server implements Runnable {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					for(int i = 0; i < clients.size(); i++){
+						if(responses.contains(clients.get(i).GetID())){
+							clients.get(i).attempt = 0;
+							responses.remove(new Integer(clients.get(i).GetID()));
+						}else{
+							clients.get(i).attempt++;
+							if(clients.get(i).attempt > MAX_ATTEMPTS){
+								disconnect(clients.get(i).GetID(), false);
+							}
+						}
+					}
 				}
 			}
 		};
 		manage.start();
+	}
+	
+	private void disconnect(int id, boolean clean){
+		ServerClient client = null;
+		for(int i = 0; i < clients.size(); i++){
+			if(clients.get(i).GetID() == id){
+				client = clients.get(i);
+				break;
+			}
+		}
+		if(client != null){
+			clients.remove(client);
+			if(clean){
+				System.out.println(client.name + "(" + id + ")" + " @ " + client.address.toString() + ":"+ client.port+ " disconnected");
+			}else{
+				System.out.println(client.name + "(" + id + ")" + " @ " + client.address.toString() + ":"+ client.port+ " timed out");
+			}
+		}
 	}
 	
 	private void sendToAll(String msg){
@@ -109,7 +140,6 @@ public class Server implements Runnable {
 						e.printStackTrace();
 					}
 					process(packet);
-					System.out.println(clients.get(0).address.toString() + ":" + clients.get(0).port);
 				}
 			}
 
@@ -124,17 +154,19 @@ public class Server implements Runnable {
 				}else if(string.startsWith("/u/")){
 					String[] tokens = string.split("/u/|/");
 					String name = tokens[1];
+					int id = Integer.parseInt(tokens[2]);
+					System.out.println("response from " + name + "(" + id + ")");
+					responses.add(id);
 					ServerClient client = getClientByUsername(name);
 					if(client == null){
 						System.out.println("Client is null");
 					}
-					client.x = Integer.parseInt(tokens[2]);
 					client.x = Integer.parseInt(tokens[3]);
+					client.x = Integer.parseInt(tokens[4]);
 					String msg = (clients.get(0).toString() + "/" + Integer.toString(clients.get(0).x) + "/" + Integer.toString(clients.get(0).y));
 					for(int i = 1; i < clients.size(); i++){
 						msg += "*" + (clients.get(i).toString() + "/" + clients.get(i).x + "/" + clients.get(i).y);
 					}
-					System.out.println(msg);
 					send(msg, client.address, client.port);
 				}else{
 					System.out.println(string);
