@@ -67,6 +67,16 @@ public class GameMP extends Game {
 		recieveLoop.start();
 	}
 	
+	public synchronized void stop() {
+		running = false;
+		try {
+			thread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		send("/d/"+ID);
+	}
+	
 	public void process(String string){
 		if(string.startsWith("/u/")){
 			String msg = "/u/"+name +"/"+ID+"/"+(int)(this.player.x)+"/"+(int)(this.player.y);

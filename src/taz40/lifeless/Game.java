@@ -32,7 +32,7 @@ public class Game extends Canvas implements Runnable {
 	protected boolean menu = true;
 	private Menu MainMenu = new Menu("LifeLess");
 	private Menu curMenu = MainMenu;
-	private Thread thread;
+	protected Thread thread;
 	protected JFrame frame;
 	protected Keyboard key;
 	protected Level level;

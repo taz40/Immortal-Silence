@@ -168,6 +168,9 @@ public class Server implements Runnable {
 						msg += "*" + (clients.get(i).toString() + "/" + clients.get(i).x + "/" + clients.get(i).y);
 					}
 					send(msg, client.address, client.port);
+				}else if(string.startsWith("/d/")){
+					int id = Integer.parseInt(string.split("/d/")[1]);
+					disconnect(id, true);
 				}else{
 					System.out.println(string);
 				}
