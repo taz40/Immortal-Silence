@@ -24,6 +24,7 @@ public class GameMP extends Game {
 	private String name, address;
 	private int port;
 	private int ID;
+	private Thread recieveLoop;
 	
 	public GameMP(String name1, String address1, int port1){
 		super();
@@ -50,13 +51,24 @@ public class GameMP extends Game {
 			key.update();
 			level.update();
 			if(key.isKeyPressed(KeyEvent.VK_ESCAPE)){
-				menu = true;
+				stop();
+				frame.dispose();
+				Game game = new Game();
+				game.frame.setResizable(false);
+				game.frame.setTitle(game.title);
+				game.frame.add(game);
+				game.frame.pack();
+				game.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				game.frame.setLocationRelativeTo(null);
+				game.frame.setVisible(true);
+				game.menu = true;
+				game.start();
 			}
 		}
 	}
 	
 	public void recvLoop(){
-		Thread recieveLoop = new Thread("Receive Loop"){
+		recieveLoop = new Thread("Receive Loop"){
 			public void run(){
 				while(running){
 					String string = receive();
@@ -69,12 +81,12 @@ public class GameMP extends Game {
 	
 	public synchronized void stop() {
 		running = false;
-		try {
-			thread.join();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		send("/d/"+ID);
+				try {
+					recieveLoop.join();
+				}catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				send("/d/"+ID);
 	}
 	
 	public void process(String string){

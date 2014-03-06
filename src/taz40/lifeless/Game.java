@@ -38,7 +38,7 @@ public class Game extends Canvas implements Runnable {
 	protected Level level;
 	protected Player player;
 	protected boolean running = false;
-	private String title = "LifeLess";
+	protected String title = "LifeLess";
 
 	protected Screen screen;
 
