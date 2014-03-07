@@ -155,12 +155,12 @@ public class Server implements Runnable {
 					String[] tokens = string.split("/u/|/");
 					String name = tokens[1];
 					int id = Integer.parseInt(tokens[2]);
-					System.out.println("response from " + name + "(" + id + ")");
-					responses.add(id);
 					ServerClient client = getClientByUsername(name);
 					if(client == null){
 						System.out.println("Client is null");
 					}
+					System.out.println("response from " + client.name + "(" + client.GetID() + ")");
+					responses.add(id);
 					client.x = Integer.parseInt(tokens[3]);
 					client.x = Integer.parseInt(tokens[4]);
 					String msg = "/i/" + (clients.get(0).GetID() + "/" + Integer.toString(clients.get(0).x) + "/" + Integer.toString(clients.get(0).y));
