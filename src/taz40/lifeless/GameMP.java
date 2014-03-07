@@ -10,6 +10,7 @@ import java.net.InetAddress;
 import javax.swing.JFrame;
 
 import taz40.lifeless.entity.mob.Player;
+import taz40.lifeless.entity.mob.PlayerMP;
 import taz40.lifeless.graphics.Screen;
 import taz40.lifeless.input.Keyboard;
 import taz40.lifeless.input.Mouse;
@@ -52,17 +53,8 @@ public class GameMP extends Game {
 			level.update();
 			if(key.isKeyPressed(KeyEvent.VK_ESCAPE)){
 				stop();
-				frame.dispose();
-				Game game = new Game();
-				game.frame.setResizable(false);
-				game.frame.setTitle(game.title);
-				game.frame.add(game);
-				game.frame.pack();
-				game.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				game.frame.setLocationRelativeTo(null);
-				game.frame.setVisible(true);
-				game.menu = true;
-				game.start();
+				this.menu = true;
+				start();
 			}
 		}
 	}
@@ -94,7 +86,28 @@ public class GameMP extends Game {
 			String msg = "/u/"+name +"/"+ID+"/"+(int)(this.player.x)+"/"+(int)(this.player.y);
 			send(msg);
 		}else if(string.startsWith("/i/")){
-			
+			String[] returns = string.split("/i/|/p/");
+			for(int i = 1; i < returns.length; i++){
+				String[] data = returns[i].split("/");
+				Player p = null;
+				for(int c = 0; c < level.players.size(); c++){
+					if(Integer.parseInt(data[0]) == level.players.get(c).ID){
+						p = level.players.get(i);
+						break;
+					}
+				}
+				if(p == null){
+					Player newp = new PlayerMP(Integer.parseInt(data[1]), Integer.parseInt(data[2]));
+					newp.ID = Integer.parseInt(data[0]);
+					level.add(newp);
+				}else{
+					p.x = Integer.parseInt(data[1]);
+					p.y = Integer.parseInt(data[2]);
+				}
+			}
+			for(int i = 0; i < level.players.size(); i++){
+				System.out.println(level.players.get(i).ID);
+			}
 		}
 	}
 	
@@ -129,6 +142,7 @@ public class GameMP extends Game {
 				return false;
 			}else{
 				ID = Integer.parseInt(data.split("/c/")[1]);
+				player.ID = ID;
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

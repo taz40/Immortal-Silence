@@ -25,7 +25,7 @@ public class Level {
 	private List<Entity> entities = new ArrayList<Entity>();
 	public List<Projectile> projectiles = new ArrayList<Projectile>();
 	public List<Particle> particles = new ArrayList<Particle>();
-	private List<Player> players = new ArrayList<Player>();
+	public List<Player> players = new ArrayList<Player>();
 
 	private Comparator<Node> nodeSorter = new Comparator<Node>() {
 		@Override

@@ -11,9 +11,8 @@ import taz40.lifeless.input.Keyboard;
 import taz40.lifeless.input.Mouse;
 import taz40.lifeless.level.Level;
 
-public class Player extends Mob {
-	
-	private Keyboard input;
+public class PlayerMP extends Player {
+
 	private int anim = 0;
 	private boolean walking = false;
 	private AnimatedSprite down = new AnimatedSprite(SpriteSheet.player_down, 32, 32, 3, 7);
@@ -23,12 +22,8 @@ public class Player extends Mob {
 	
 	private AnimatedSprite animSprite = null;
 
-	public Player(Keyboard input){
-		initiate(input);
-	}
-	
-	protected Player(){
-		
+	public PlayerMP(){
+		initiate();
 	}
 	
 	public void init(Level level){
@@ -37,14 +32,13 @@ public class Player extends Mob {
 		secondary.init(level, this);
 	}
 	
-	public Player(int x, int y, Keyboard input){
+	public PlayerMP(int x, int y){
 		this.x = x;
 		this.y = y;
-		initiate(input);
+		initiate();
 	}
 	
-	private void initiate(Keyboard input){
-		this.input = input; 
+	private void initiate(){ 
 		animSprite = down;
 		primary = new Sword();
 		secondary = new Axe();
@@ -57,10 +51,6 @@ public class Player extends Mob {
 		else animSprite.setFrame(0);
 		double xa=0,ya=0;
 		double speed = 0.7;
-		if(input.up) ya -= speed;
-		if(input.down) ya += speed;
-		if(input.right) xa += speed;
-		if(input.left) xa -= speed;
 		if(xa != 0 || ya != 0){
 			move(xa, ya);
 			walking = true;
@@ -68,7 +58,6 @@ public class Player extends Mob {
 			walking = false;
 		}
 		clear();
-		updateShooting();
 	}
 	
 	private void clear() {
@@ -76,21 +65,6 @@ public class Player extends Mob {
 		for(int i = 0; i < level.projectiles.size(); i++){
 			Projectile p = level.projectiles.get(i);
 			if(p.isRemoved()) level.projectiles.remove(i);
-		}
-	}
-
-	private void updateShooting() {
-		if(Mouse.getButton() == 1){
-			double dx = Mouse.getX() - (Game.width*Game.scale)/2;
-			double dy = Mouse.getY() - (Game.height*Game.scale)/2;
-			double dir = Math.atan2(dy, dx);
-			primary.shoot(x, y, dir);
-		}
-		if(Mouse.getButton() == 3){
-			double dx = Mouse.getX() - (Game.width*Game.scale)/2;
-			double dy = Mouse.getY() - (Game.height*Game.scale)/2;
-			double dir = Math.atan2(dy, dx);
-			secondary.shoot(x, y, dir);
 		}
 	}
 
@@ -114,5 +88,4 @@ public class Player extends Mob {
 		primary.render(screen);
 		secondary.render(screen);
 	}
-	
 }

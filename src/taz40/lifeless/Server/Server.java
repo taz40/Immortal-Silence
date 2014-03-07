@@ -163,9 +163,9 @@ public class Server implements Runnable {
 					}
 					client.x = Integer.parseInt(tokens[3]);
 					client.x = Integer.parseInt(tokens[4]);
-					String msg = (clients.get(0).toString() + "/" + Integer.toString(clients.get(0).x) + "/" + Integer.toString(clients.get(0).y));
+					String msg = "/i/" + (clients.get(0).GetID() + "/" + Integer.toString(clients.get(0).x) + "/" + Integer.toString(clients.get(0).y));
 					for(int i = 1; i < clients.size(); i++){
-						msg += "*" + (clients.get(i).toString() + "/" + clients.get(i).x + "/" + clients.get(i).y);
+						msg += "/p/" + (clients.get(i).GetID() + "/" + clients.get(i).x + "/" + clients.get(i).y);
 					}
 					send(msg, client.address, client.port);
 				}else if(string.startsWith("/d/")){
