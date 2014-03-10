@@ -155,7 +155,7 @@ public class Server implements Runnable {
 					String[] tokens = string.split("/u/|/");
 					String name = tokens[1];
 					int id = Integer.parseInt(tokens[2]);
-					ServerClient client = getClientByUsername(name);
+					ServerClient client = getClientByID(id);
 					if(client == null){
 						System.out.println("Client is null");
 					}
@@ -179,9 +179,9 @@ public class Server implements Runnable {
 		receive.start();
 	}
 	
-	public ServerClient getClientByUsername(String username){
+	public ServerClient getClientByID(int id){
 		for(int i = 0; i < clients.size(); i++){
-			if(clients.get(i).name.equals(username)){
+			if(clients.get(i).GetID() == id){
 				return clients.get(i);
 			}
 		}
