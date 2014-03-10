@@ -121,6 +121,7 @@ public class GameMP extends Game {
 		level.clear();
 		TileCoordinate playerspawn = new TileCoordinate(20, 36);
 		player = new Player(playerspawn.x(), playerspawn.y(), key);
+		player.ID = ID;
 		level.add(player);
 		addKeyListener(key);
 		
