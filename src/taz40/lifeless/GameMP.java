@@ -92,7 +92,7 @@ public class GameMP extends Game {
 				Player p = null;
 				for(int c = 0; c < level.players.size(); c++){
 					if(Integer.parseInt(data[0]) == level.players.get(c).ID){
-						p = level.players.get(i);
+						p = level.players.get(c);
 						break;
 					}
 				}
