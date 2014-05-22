@@ -13,7 +13,7 @@ public class Button extends MenuItem {
 	int height;
 	int width;
 	int rawwidth, rawheight;
-	Game game;
+	public Game game;
 	public String text;
 	function f;
 	
@@ -40,10 +40,9 @@ public class Button extends MenuItem {
 		width = (fm.stringWidth(text)*game.scale);
 		float scalex = (game.frame.getWidth() / game.width);
 		float scaley = (game.frame.getHeight() / game.height);
-		System.out.println(scalex + ", " + scaley);
 		float collx = (x+x1);
 		float colly = (y+y1);
-		float collwidth = rawwidth+1;
+		float collwidth = rawwidth+10;
 		float collheight = rawheight;
 		if(!(Mouse.x/scalex < collx || Mouse.x/scalex >= collx+collwidth || Mouse.y/scaley < colly || Mouse.y/scaley >= colly+collheight)){
 			hover = true;
@@ -59,7 +58,7 @@ public class Button extends MenuItem {
 	@Override
 	public void render(Screen screen, int x1, int y1) {
 		// TODO Auto-generated method stub
-		int col = 0xff000000;
+		int col = 0xffd0d0d0;
 		if(hover) col = 0xff505050;
 		screen.renderString(x+x1, y+y1, text, true, col);
 	}

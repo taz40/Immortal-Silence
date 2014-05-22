@@ -10,6 +10,7 @@ import java.awt.image.DataBufferInt;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import com.kissr.LightsOutGaming.LifeLess.GUI.Button;
 import com.kissr.LightsOutGaming.LifeLess.GUI.Menu;
@@ -43,8 +44,8 @@ public class Game extends Canvas implements Runnable{
 		frame.setSize(width*scale, height*scale);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
-		frame.setLocationRelativeTo(null);
 		frame.add(this);
+		frame.setLocationRelativeTo(null);
 		keyboard = new Keyboard();
 		MainMenu = new Menu(10, 10);
 		MainMenu.active = true;
@@ -83,16 +84,27 @@ public class Game extends Canvas implements Runnable{
 				fullscreen = !fullscreen;
 				if(fullscreen){
 					b.text = "FullScreen: ON";
-					frame.setVisible(false);
-					//frame.setUndecorated(true);
-					frame.setVisible(true);
+					frame.dispose();
+					frame = new JFrame(TITLE);
+					frame.setSize(width*scale, height*scale);
+					frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+					frame.setResizable(false);
+					frame.add(b.game);
+					frame.setLocationRelativeTo(null);
+					frame.setUndecorated(true);
 					frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+					frame.setVisible(true);
 				}else{
 					b.text = "FullScreen: OFF";
-					frame.setVisible(false);
-					//frame.setUndecorated(false);
+					frame.dispose();
+					frame = new JFrame(TITLE);
+					frame.setSize(width*scale, height*scale);
+					frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+					frame.setResizable(false);
+					frame.setLocationRelativeTo(null);
+					frame.add(b.game);
+					frame.setUndecorated(false);
 					frame.setVisible(true);
-					frame.setExtendedState(JFrame.NORMAL);
 				}
 			}}));
 		OptionsMenu.add(new Button("Back", this, 10, 30, new function(){
@@ -111,7 +123,7 @@ public class Game extends Canvas implements Runnable{
 		this.addMouseMotionListener(new Mouse());
 		frame.setVisible(true);
 		screen = new Screen(width, height, this);
-		screen.clearcolor = Color.blue.getRGB();
+		screen.clearcolor = Color.black.getRGB();
 		start();
 	}
 	
