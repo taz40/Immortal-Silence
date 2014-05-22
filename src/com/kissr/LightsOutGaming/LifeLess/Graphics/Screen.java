@@ -87,11 +87,27 @@ public class Screen {
 				int ya = y+yp;
 				if(xa < 0 || xa >= width || ya < 0 || ya >= height) continue;
 				int col = textpixels[x+y*stringwidth];
-				if(col == 0xff000000) col = 0xff0000ff;
+				if(col == 0xff000000) col = 0xffff00ff;
 				if(col != 0xffff00ff) pixels[xa+ya*width] = col;
 			}
 		}
 		
+	}
+	
+	public void renderRect(int xp, int yp, int w, int h, int col, boolean fixed){
+		if(fixed){
+			xp -= xOffset;
+			yp -= yOffset;
+		}
+		
+		for(int y = 0; y < h; y++){
+			for(int x = 0; x < w; x++){
+				int xa = x+xp;
+				int ya = y+yp;
+				if(xa < 0 || xa >= width || ya < 0 || ya >= height) continue;
+				if(col != 0xffff00ff) pixels[xa+ya*width] = col;
+			}
+		}
 	}
 	
 }

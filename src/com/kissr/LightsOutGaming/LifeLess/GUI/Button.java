@@ -33,13 +33,19 @@ public class Button extends MenuItem {
 	@Override
 	public void update(int x1, int y1) {
 		// TODO Auto-generated method stub
-		float scale = (game.frame.getWidth() / game.width);
-		System.out.println(scale);
+		FontMetrics fm = game.getFontMetrics(game.getFont());
+		rawheight = fm.getHeight();
+		rawwidth = fm.stringWidth(text);
+		height = (fm.getHeight()*game.scale);
+		width = (fm.stringWidth(text)*game.scale);
+		float scalex = (game.frame.getWidth() / game.width);
+		float scaley = (game.frame.getHeight() / game.height);
+		System.out.println(scalex + ", " + scaley);
 		float collx = (x+x1);
 		float colly = (y+y1);
-		float collwidth = rawwidth;
+		float collwidth = rawwidth+1;
 		float collheight = rawheight;
-		if(!(Mouse.x/scale < collx || Mouse.x/scale >= collx+collwidth || Mouse.y/scale < colly || Mouse.y/scale >= colly+collheight)){
+		if(!(Mouse.x/scalex < collx || Mouse.x/scalex >= collx+collwidth || Mouse.y/scaley < colly || Mouse.y/scaley >= colly+collheight)){
 			hover = true;
 			if(Mouse.clicked){
 				Mouse.clicked = false;
