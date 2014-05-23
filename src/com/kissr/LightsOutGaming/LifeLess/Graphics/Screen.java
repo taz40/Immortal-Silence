@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import com.kissr.LightsOutGaming.LifeLess.Game;
+import com.kissr.LightsOutGaming.LifeLess.Level.Level;
 
 public class Screen {
 
@@ -59,6 +60,25 @@ public class Screen {
 				int xs = x;
 				if(xa < 0 || xa >= width || ya < 0 || ya >= height) continue;
 				int col = sprite.pixels[x+y*sprite.width];
+				if(col != 0xffff00ff) pixels[xa+ya*width] = col;
+			}
+		}
+	}
+	
+	public void renderLevel(int xp, int yp, Level level, boolean fixed){
+		if(fixed){
+			xp -= xOffset;
+			yp -= yOffset;
+		}
+		
+		for(int y = 0; y < level.height; y++){
+			int ys = y;
+			for(int x = 0; x < level.width; x++){
+				int xa = x+xp;
+				int ya = y+yp;
+				int xs = x;
+				if(xa < 0 || xa >= width || ya < 0 || ya >= height) continue;
+				int col = level.pixels[x+y*level.width];
 				if(col != 0xffff00ff) pixels[xa+ya*width] = col;
 			}
 		}

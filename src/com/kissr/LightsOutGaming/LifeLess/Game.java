@@ -16,6 +16,7 @@ import com.kissr.LightsOutGaming.LifeLess.GUI.Menu;
 import com.kissr.LightsOutGaming.LifeLess.GUI.Text;
 import com.kissr.LightsOutGaming.LifeLess.Graphics.Screen;
 import com.kissr.LightsOutGaming.LifeLess.Graphics.Sprite;
+import com.kissr.LightsOutGaming.LifeLess.Level.Level;
 import com.kissr.LightsOutGaming.LifeLess.entity.Entity;
 import com.kissr.LightsOutGaming.LifeLess.entity.Player;
 import com.kissr.LightsOutGaming.LifeLess.input.Keyboard;
@@ -25,7 +26,8 @@ import com.kissr.LightsOutGaming.LifeLess.utill.function;
 public class Game extends Canvas implements Runnable{
 
 	public int width = 300;
-	public int height = width / 16*9;
+	public int height;
+	public float aspectratio;
 	public int scale = 3;
 	public JFrame frame;
 	public static final String TITLE = "Life Less 2D alpha";
@@ -41,14 +43,29 @@ public class Game extends Canvas implements Runnable{
 	boolean ingame = false;
 	boolean pause = false;
 	
-	private BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-	private int[] pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
+	private BufferedImage image;
+	private int[] pixels;
+	Level currentlevel;
 	
 	private ArrayList<Menu> menues = new ArrayList<Menu>();
 	private ArrayList<Entity> gameentities = new ArrayList<Entity>();
 	private ArrayList<Entity> menuentities = new ArrayList<Entity>();
 	
 	public Game(){
+		frame = new JFrame(TITLE);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setLocationRelativeTo(null);
+		frame.setUndecorated(true);
+		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		frame.setVisible(true);
+		
+		aspectratio = (float)frame.getHeight() / (float)frame.getWidth();
+		
+		frame.setVisible(false);
+		frame.dispose();
+		height = (int) (width * aspectratio);
+		image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+		pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
 		frame = new JFrame(TITLE);
 		frame.setSize(width*scale, height*scale);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -177,6 +194,7 @@ public class Game extends Canvas implements Runnable{
 		scale = frame.getWidth() / width;
 		screen = new Screen(width, height, this);
 		screen.clearcolor = Color.black.getRGB();
+		currentlevel = Level.l1;
 		start();
 	}
 	
@@ -307,6 +325,7 @@ public class Game extends Canvas implements Runnable{
 			for(int i = 0; i < gameentities.size(); i++){
 				gameentities.get(i).update();
 			}
+			currentlevel.update();
 			screen.xOffset = p.x - ((width/2)-16);
 			screen.yOffset = p.y - ((height/2)-16);
 		}
@@ -322,9 +341,7 @@ public class Game extends Canvas implements Runnable{
 		
 		screen.clear();
 		
-		screen.renderSprite(20, 20, Sprite.grass, true);
-		
-		
+		currentlevel.render(screen);
 		
 		if(ingame || pause){
 			for(int i = 0; i < gameentities.size(); i++){
@@ -347,6 +364,7 @@ public class Game extends Canvas implements Runnable{
 		}
 		
 		Graphics g = bs.getDrawGraphics();
+		g.fillRect(0, 0, getWidth(), getHeight());
 		g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
 		g.dispose();
 		bs.show();
