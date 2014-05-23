@@ -18,6 +18,7 @@ public class Button extends MenuItem {
 	function f;
 	
 	public Button(String text, Game g, int x, int y, function f){
+		super(x, y);
 		this.f = f;
 		this.text = text;
 		game = g;
@@ -26,8 +27,6 @@ public class Button extends MenuItem {
 		rawwidth = fm.stringWidth(text);
 		height = (fm.getHeight()*game.scale);
 		width = (fm.stringWidth(text)*game.scale);
-		this.x = x;
-		this.y = y;
 	}
 
 	@Override
@@ -38,13 +37,13 @@ public class Button extends MenuItem {
 		rawwidth = fm.stringWidth(text);
 		height = (fm.getHeight()*game.scale);
 		width = (fm.stringWidth(text)*game.scale);
-		float scalex = (game.frame.getWidth() / game.width);
-		float scaley = (game.frame.getHeight() / game.height);
-		float collx = (x+x1);
-		float colly = (y+y1);
-		float collwidth = rawwidth+10;
-		float collheight = rawheight;
-		if(!(Mouse.x/scalex < collx || Mouse.x/scalex >= collx+collwidth || Mouse.y/scaley < colly || Mouse.y/scaley >= colly+collheight)){
+		float scalex = ((float)game.frame.getWidth() / (float)game.width);
+		float scaley = ((float)game.frame.getHeight() / (float)game.height);
+		float collx = (x+x1) * scalex;
+		float colly = (y+y1) * scaley;
+		float collwidth = (rawwidth) * scalex;
+		float collheight = rawheight * scaley;
+		if(!(Mouse.x < collx || Mouse.x >= collx+collwidth || Mouse.y < colly || Mouse.y >= colly+collheight)){
 			hover = true;
 			if(Mouse.clicked){
 				Mouse.clicked = false;
@@ -60,7 +59,7 @@ public class Button extends MenuItem {
 		// TODO Auto-generated method stub
 		int col = 0xffd0d0d0;
 		if(hover) col = 0xff505050;
-		screen.renderString(x+x1, y+y1, text, true, col);
+		screen.renderString(x+x1, y+y1, text, false, col);
 	}
 
 }

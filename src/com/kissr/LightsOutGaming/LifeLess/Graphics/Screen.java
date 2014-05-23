@@ -52,11 +52,32 @@ public class Screen {
 		}
 		
 		for(int y = 0; y < sprite.height; y++){
+			int ys = y;
 			for(int x = 0; x < sprite.width; x++){
 				int xa = x+xp;
 				int ya = y+yp;
+				int xs = x;
 				if(xa < 0 || xa >= width || ya < 0 || ya >= height) continue;
 				int col = sprite.pixels[x+y*sprite.width];
+				if(col != 0xffff00ff) pixels[xa+ya*width] = col;
+			}
+		}
+	}
+	
+	public void renderMob(int xp, int yp, Sprite sprite, boolean fixed, int flip){
+			xp -= xOffset;
+			yp -= yOffset;
+		
+		for(int y = 0; y < sprite.height; y++){
+			int ys = y;
+			if(flip == 2 || flip == 3) ys = 31 - y;
+			for(int x = 0; x < sprite.width; x++){
+				int xa = x+xp;
+				int ya = y+yp;
+				int xs = x;
+				if(flip == 1 || flip == 3) xs = 31 - x;
+				if(xa < 0 || xa >= width || ya < 0 || ya >= height) continue;
+				int col = sprite.pixels[xs+ys*sprite.width];
 				if(col != 0xffff00ff) pixels[xa+ya*width] = col;
 			}
 		}

@@ -28,5 +28,9 @@ public class Keyboard implements KeyListener {
 	public boolean getKey(int key){
 		return keys[key];
 	}
+	
+	public void resetKey(int key){
+		keys[key] = false;
+	}
 
 }

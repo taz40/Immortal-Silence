@@ -7,12 +7,15 @@ public class Sprite {
 	public SpriteSheet sheet;
 	
 	public static Sprite grass = new Sprite(0, 0, 16, 16, SpriteSheet.LevelSprites);
+	public static Sprite player_down = new Sprite(0, 0, 32, 32, SpriteSheet.player1);
+	public static Sprite player_right = new Sprite(1, 0, 32, 32, SpriteSheet.player1);
+	public static Sprite player_up = new Sprite(2, 0, 32, 32, SpriteSheet.player1);
 	
 	public Sprite(int x, int y, int width, int height, SpriteSheet sheet){
 		this.width = width;
 		this.height = height;
-		int xoff = x * 16;
-		int yoff = y * 16;
+		int xoff = x * width;
+		int yoff = y * height;
 		pixels = new int[width*height];
 		for(int xp = 0; xp < width; xp++){
 			for(int yp = 0; yp < height; yp++){

@@ -41,4 +41,8 @@ public class Menu {
 		menuitems.remove(item);
 	}
 	
+	public MenuItem get(int item){
+		return menuitems.get(item);
+	}
+	
 }
