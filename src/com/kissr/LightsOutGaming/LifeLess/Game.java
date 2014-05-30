@@ -134,7 +134,15 @@ public class Game extends Canvas implements Runnable{
 				}
 				b.game.requestFocus();
 			}}));
-		OptionsMenu.add(new Button("Back", this, 10, 30, new function(){
+		OptionsMenu.add(new Button("Refresh Screen", this, 10, 30, new function(){
+
+			@Override
+			public void run(Button b) {
+				// TODO Auto-generated method stub
+				new Main();
+				stop();
+			}}));
+		OptionsMenu.add(new Button("Back", this, 10, 50, new function(){
 
 			@Override
 			public void run(Button b) {
@@ -192,6 +200,8 @@ public class Game extends Canvas implements Runnable{
 		this.addMouseMotionListener(new Mouse());
 		frame.setVisible(true);
 		scale = frame.getWidth() / width;
+		System.out.println(width + ", "+height);
+		System.out.println(width*height);
 		screen = new Screen(width, height, this);
 		screen.clearcolor = Color.black.getRGB();
 		currentlevel = Level.l1;
@@ -226,7 +236,7 @@ public class Game extends Canvas implements Runnable{
 		long lastTime = System.nanoTime();
 		long timer = System.currentTimeMillis();
 		final double nsups = 1000000000.0 / 60.0;
-		final double nsfps = 1000000000.0 / 200.0;
+		final double nsfps = 1000000000.0 / 60.0;
 		double deltaups = 0;
 		double deltafps = 0;
 		int frames = 0;

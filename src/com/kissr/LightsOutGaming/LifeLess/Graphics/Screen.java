@@ -70,16 +70,17 @@ public class Screen {
 			xp -= xOffset;
 			yp -= yOffset;
 		}
-		
+		int px = 0;
 		for(int y = 0; y < level.height; y++){
-			int ys = y;
 			for(int x = 0; x < level.width; x++){
 				int xa = x+xp;
 				int ya = y+yp;
-				int xs = x;
 				if(xa < 0 || xa >= width || ya < 0 || ya >= height) continue;
 				int col = level.pixels[x+y*level.width];
-				if(col != 0xffff00ff) pixels[xa+ya*width] = col;
+				if(col != 0xffff00ff){
+					pixels[xa+ya*width] = col;
+					px++;
+				}
 			}
 		}
 	}
