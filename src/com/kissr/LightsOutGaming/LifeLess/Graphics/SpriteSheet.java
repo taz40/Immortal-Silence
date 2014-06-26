@@ -11,6 +11,7 @@ public class SpriteSheet {
 	int width, height;
 	
 	public static SpriteSheet LevelSprites = new SpriteSheet("/Textures/spawn_level.png");
+	public static SpriteSheet MainSheet = new SpriteSheet("/Textures/MainSheet.png");
 	public static SpriteSheet player1 = new SpriteSheet("/Textures/player_sheet.png");
 	
 	public SpriteSheet(String path){

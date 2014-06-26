@@ -9,6 +9,7 @@ public abstract class Entity {
 	public Sprite sprite;
 	public boolean defaultrender;
 	public boolean active = true;
+	public boolean networked = false;
 	public int flip = 0;
 	
 	public Entity(int x, int y, Sprite sprite, boolean defaultrender){
@@ -19,7 +20,7 @@ public abstract class Entity {
 	}
 	
 	public void update(){
-		if(active){
+		if(active && !networked){
 			onUpdate();
 		}
 	}

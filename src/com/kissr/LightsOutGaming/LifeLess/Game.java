@@ -7,9 +7,16 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import com.kissr.LightsOutGaming.LifeLess.GUI.Button;
 import com.kissr.LightsOutGaming.LifeLess.GUI.Menu;
@@ -17,6 +24,7 @@ import com.kissr.LightsOutGaming.LifeLess.GUI.Text;
 import com.kissr.LightsOutGaming.LifeLess.Graphics.Screen;
 import com.kissr.LightsOutGaming.LifeLess.Graphics.Sprite;
 import com.kissr.LightsOutGaming.LifeLess.Level.Level;
+import com.kissr.LightsOutGaming.LifeLess.Server.Server;
 import com.kissr.LightsOutGaming.LifeLess.entity.Entity;
 import com.kissr.LightsOutGaming.LifeLess.entity.Player;
 import com.kissr.LightsOutGaming.LifeLess.input.Keyboard;
@@ -39,13 +47,19 @@ public class Game extends Canvas implements Runnable{
 	Menu OptionsMenu;
 	Menu PauseMenu;
 	boolean fullscreen;
+	public boolean single = true;
 	Player p;
 	boolean ingame = false;
 	boolean pause = false;
+	InetAddress ip;
+	int port;
+	DatagramSocket socket;
 	
 	private BufferedImage image;
 	private int[] pixels;
 	Level currentlevel;
+	String name = "dude";
+	int id;
 	
 	private ArrayList<Menu> menues = new ArrayList<Menu>();
 	private ArrayList<Entity> gameentities = new ArrayList<Entity>();
@@ -73,18 +87,64 @@ public class Game extends Canvas implements Runnable{
 		frame.add(this);
 		frame.setLocationRelativeTo(null);
 		keyboard = new Keyboard();
+		
 		MainMenu = new Menu(10, 10);
 		MainMenu.active = true;
-		MainMenu.add(new Button("Start Game", this, 10, 10, new function(){
+		MainMenu.add(new Button("Single Player", this, 10, 10, new function(){
 
 			@Override
 			public void run(Button b) {
 				// TODO Auto-generated method stub
-				ingame = true;
-				MainMenu.active = false;
+				single = true;
+				if(networksetup()){
+					ingame = true;
+					MainMenu.active = false;
+				}
 			}}));
 		
-		MainMenu.add(new Button("Options", this, 10, 30, new function(){
+		MainMenu.add(new Button("Multiplayer", this, 10, 30, new function(){
+
+			@Override
+			public void run(Button b) {
+				// TODO Auto-generated method stub
+				single = false;
+				String s = (String)JOptionPane.showInputDialog(
+	                    frame,
+	                    "Ip",
+	                    "Ip Address",
+	                    JOptionPane.PLAIN_MESSAGE,
+	                    null,
+	                    null,
+	                    "localhost");
+				try {
+					ip = InetAddress.getByName(s);
+				} catch (UnknownHostException e) {
+					// TODO Auto-generated catch block
+					ip = null;
+				}
+				s = (String)JOptionPane.showInputDialog(
+	                    frame,
+	                    "port",
+	                    "Port",
+	                    JOptionPane.PLAIN_MESSAGE,
+	                    null,
+	                    null,
+	                    "2743");
+				
+				try{
+					port = Integer.parseInt(s);
+				}catch(Exception e){
+					port = 0;
+				}
+				if(networksetup()){
+					ingame = true;
+					MainMenu.active = false;
+				}else{
+					JOptionPane.showMessageDialog(frame, "Unnable to connect.");
+				}
+			}}));
+		
+		MainMenu.add(new Button("Options", this, 10, 50, new function(){
 
 			@Override
 			public void run(Button b) {
@@ -93,7 +153,7 @@ public class Game extends Canvas implements Runnable{
 				OptionsMenu.active = true;
 			}}));
 		
-		MainMenu.add(new Button("Quit", this, 10, 50, new function(){
+		MainMenu.add(new Button("Quit", this, 10, 70, new function(){
 
 			@Override
 			public void run(Button b) {
@@ -183,6 +243,9 @@ public class Game extends Canvas implements Runnable{
 			@Override
 			public void run(Button b) {
 				// TODO Auto-generated method stub
+				if(single){
+					send("/s/");
+				}
 				pause = false;
 				PauseMenu.active = false;
 				MainMenu.active = true;
@@ -190,10 +253,14 @@ public class Game extends Canvas implements Runnable{
 			
 		}));
 		
+		
+		
+		//-------------------------------------------------------------------------
+		
 		menues.add(MainMenu);
 		menues.add(OptionsMenu);
 		menues.add(PauseMenu);
-		gameentities.add(new Player(10, 10, Sprite.player_up, keyboard));
+		gameentities.add(new Player(10, 10, Sprite.player, keyboard));
 		p = (Player) gameentities.get(0);
 		this.addKeyListener(keyboard);
 		this.addMouseListener(new Mouse());
@@ -208,6 +275,44 @@ public class Game extends Canvas implements Runnable{
 		start();
 	}
 	
+	protected boolean networksetup() {
+		// TODO Auto-generated method stub
+		try {
+			socket = new DatagramSocket();
+		} catch (SocketException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if(single){
+			try {
+				ip = InetAddress.getByName("localhost");
+			} catch (UnknownHostException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			port = 4025;
+			new Server(true, 4025);
+		}
+		if(port == 0) port = 2743;
+		if(ip == null) try {
+			ip = InetAddress.getByName("localhost");
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		send("/c/" + name);
+		String s = receive();
+		if(s == "false"){
+			return false;
+		}
+		recvthread();
+		s = s.substring(3);
+		id = Integer.parseInt(s);
+		
+		return true;
+	}
+
 	public synchronized void start(){
 		runningthread = new Thread(this, "running thread");
 		running = true;
@@ -264,6 +369,43 @@ public class Game extends Canvas implements Runnable{
 				frames = 0;
 			}
 		}
+	}
+	
+	private void recvthread(){
+		Thread recv = new Thread("recv thread"){
+			public void run(){
+				while(ingame || pause){
+					try{
+					String s = receive();
+					if(s.startsWith("/u/")){
+						send("/u/" + name + "/" + id + "/" + p.x + "/" + p.y);
+						String players = receive();
+						System.out.println(players);
+						gameentities.clear();
+						players = players.substring(3);
+						String[] playerarray = players.split("/p/");
+						for(int i = 0; i < playerarray.length; i++){
+							String[] playerinfo = playerarray[i].split("/");
+							if(id != Integer.parseInt(playerinfo[1])){ 
+								Player p = new Player(Integer.parseInt(playerinfo[2]), Integer.parseInt(playerinfo[3]), Sprite.player, keyboard);
+								p.networked = true;
+								p.name = playerinfo[0];
+								p.id = Integer.parseInt(playerinfo[1]);
+								gameentities.add(p);
+							}else{
+								gameentities.add(p);
+							}
+						}
+					}else if(s.startsWith("/t/")){
+						send("/r/" + id);
+					}
+					}catch(Exception e){
+						
+					}
+				}
+			}
+		};
+		recv.start();
 	}
 	
 	private void update(){
@@ -378,6 +520,38 @@ public class Game extends Canvas implements Runnable{
 		g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
 		g.dispose();
 		bs.show();
+	}
+	
+	private String receive(){
+		byte[] data = new byte[1024];
+		DatagramPacket packet = new DatagramPacket(data, data.length);
+		
+		try {
+			socket.setSoTimeout(1000);
+			socket.receive(packet);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			return "false";
+		}
+		
+		String message = new String(packet.getData());
+		return message.split("/e/")[0];
+	}
+	
+	private void send(String s){
+		final String string = s + "/e/";
+		Thread send = new Thread("Send"){
+			public void run(){
+				DatagramPacket packet = new DatagramPacket(string.getBytes(), string.getBytes().length, ip, port);
+				try {
+					socket.send(packet);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		};
+		send.start();
 	}
 	
 }

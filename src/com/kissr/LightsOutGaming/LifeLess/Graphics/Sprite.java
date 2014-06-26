@@ -1,5 +1,7 @@
 package com.kissr.LightsOutGaming.LifeLess.Graphics;
 
+import java.awt.image.BufferedImage;
+
 public class Sprite {
 
 	public int width, height;
@@ -10,9 +12,7 @@ public class Sprite {
 	public static Sprite grass = new Sprite(0, 0, 16, 16, SpriteSheet.LevelSprites);
 	public static Sprite floor = new Sprite(1, 1, 16, 16, SpriteSheet.LevelSprites);
 	public static Sprite hedge = new Sprite(1, 0, 16, 16, SpriteSheet.LevelSprites);
-	public static Sprite player_down = new Sprite(0, 0, 32, 32, SpriteSheet.player1);
-	public static Sprite player_right = new Sprite(1, 0, 32, 32, SpriteSheet.player1);
-	public static Sprite player_up = new Sprite(2, 0, 32, 32, SpriteSheet.player1);
+	public static Sprite player = new Sprite(1, 2, 16, 16, SpriteSheet.MainSheet);
 	
 	public Sprite(int x, int y, int width, int height, SpriteSheet sheet){
 		this.width = width;
@@ -36,6 +36,14 @@ public class Sprite {
 		for(int i = 0; i < pixels.length; i++){
 			pixels[i] = color;
 		}
+	}
+
+	public Sprite(BufferedImage image) {
+		// TODO Auto-generated constructor stub
+		this.width = image.getWidth();
+		this.height = image.getHeight();
+		pixels = new int[width*height];
+		image.getRGB(0, 0, width, height, pixels, 0, width);
 	}
 	
 }
