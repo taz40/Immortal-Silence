@@ -13,9 +13,11 @@ import com.kissr.LightsOutGaming.LifeLess.input.Mouse;
 public class Player extends Entity{
 	
 	private Keyboard key;
-	private double rotation;
+	public double rotation;
 	public String name;
 	public int id;
+	public int sound = 16;
+	public int scent = 16;
 
 	public Player(int x, int y, Sprite sprite, Keyboard key) {
 		super(x, y, sprite, true);

@@ -18,6 +18,9 @@ public class Menu {
 	public void update(){
 		if(!active) return;
 		for(int i = 0; i < menuitems.size(); i++){
+			menuitems.get(i).refresh();
+		}
+		for(int i = 0; i < menuitems.size(); i++){
 			menuitems.get(i).update(x, y);
 		}
 	}

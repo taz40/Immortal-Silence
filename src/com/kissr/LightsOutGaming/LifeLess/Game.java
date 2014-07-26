@@ -15,11 +15,17 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import com.kissr.LightsOutGaming.LifeLess.GUI.Button;
 import com.kissr.LightsOutGaming.LifeLess.GUI.Menu;
+import com.kissr.LightsOutGaming.LifeLess.GUI.SpriteButton;
 import com.kissr.LightsOutGaming.LifeLess.GUI.Text;
 import com.kissr.LightsOutGaming.LifeLess.Graphics.Screen;
 import com.kissr.LightsOutGaming.LifeLess.Graphics.Sprite;
@@ -27,6 +33,7 @@ import com.kissr.LightsOutGaming.LifeLess.Level.Level;
 import com.kissr.LightsOutGaming.LifeLess.Server.Server;
 import com.kissr.LightsOutGaming.LifeLess.entity.Entity;
 import com.kissr.LightsOutGaming.LifeLess.entity.Player;
+import com.kissr.LightsOutGaming.LifeLess.entity.Zombie;
 import com.kissr.LightsOutGaming.LifeLess.input.Keyboard;
 import com.kissr.LightsOutGaming.LifeLess.input.Mouse;
 import com.kissr.LightsOutGaming.LifeLess.utill.function;
@@ -46,6 +53,7 @@ public class Game extends Canvas implements Runnable{
 	Menu MainMenu;
 	Menu OptionsMenu;
 	Menu PauseMenu;
+	Menu PlayerChange;
 	boolean fullscreen;
 	public boolean single = true;
 	Player p;
@@ -54,18 +62,35 @@ public class Game extends Canvas implements Runnable{
 	InetAddress ip;
 	int port;
 	DatagramSocket socket;
+	Server spserver;
 	
 	private BufferedImage image;
 	private int[] pixels;
 	Level currentlevel;
 	String name = "dude";
 	int id;
+	Clip menu;
+	Clip peacefull;
+	Game game = this;
 	
 	private ArrayList<Menu> menues = new ArrayList<Menu>();
 	private ArrayList<Entity> gameentities = new ArrayList<Entity>();
 	private ArrayList<Entity> menuentities = new ArrayList<Entity>();
 	
 	public Game(){
+		try {
+			AudioInputStream ais = AudioSystem.getAudioInputStream(Game.class.getResource("/TitleFull.wav"));
+			menu = AudioSystem.getClip();
+			menu.open(ais);
+			menu.loop(Clip.LOOP_CONTINUOUSLY);
+			AudioInputStream ais2 = AudioSystem.getAudioInputStream(Game.class.getResource("/Peaceful.wav"));
+			peacefull = AudioSystem.getClip();
+			peacefull.open(ais2);
+			peacefull.loop(Clip.LOOP_CONTINUOUSLY);
+		} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		frame = new JFrame(TITLE);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
@@ -194,6 +219,53 @@ public class Game extends Canvas implements Runnable{
 				}
 				b.game.requestFocus();
 			}}));
+		OptionsMenu.add(new Text("Text Color", 150, 10));
+		OptionsMenu.add(new Button("Red", this, 120, 30, 0xffFF0000, 0xff990000, new function(){
+
+			@Override
+			public void run(Button b) {
+				// TODO Auto-generated method stub
+				Button.defaulthovercol = 0xff990000;
+				Button.defaultcol = 0xffFF0000;
+				Text.defaultcol = 0xffFF0000;
+			}
+			
+		}));
+		OptionsMenu.add(new Button("Green", this, 147, 30, 0xff33CC33, 0xff248F24, new function(){
+
+			@Override
+			public void run(Button b) {
+				// TODO Auto-generated method stub
+				Button.defaulthovercol = 0xff248F24;
+				Button.defaultcol = 0xff33CC33;
+				Text.defaultcol = 0xff33CC33;
+				
+				
+			}
+			
+		}));
+		OptionsMenu.add(new Button("Blue", this, 185, 30,0xff0000FF, 0xff000099, new function(){
+
+			@Override
+			public void run(Button b) {
+				// TODO Auto-generated method stub
+				Button.defaulthovercol = 0xff000099;
+				Button.defaultcol = 0xff0000FF;
+				Text.defaultcol = 0xff0000FF;
+			}
+			
+		}));
+		OptionsMenu.add(new Button("White", this, 215, 30, 0xffd0d0d0, 0xff505050, new function(){
+
+			@Override
+			public void run(Button b) {
+				// TODO Auto-generated method stub
+				Button.defaulthovercol = 0xff505050;
+				Button.defaultcol = 0xffd0d0d0;
+				Text.defaultcol = 0xffd0d0d0;
+			}
+			
+		}));
 		OptionsMenu.add(new Button("Refresh Screen", this, 10, 30, new function(){
 
 			@Override
@@ -216,7 +288,7 @@ public class Game extends Canvas implements Runnable{
 				}
 			}}));
 		PauseMenu = new Menu((width/2) - 50, (height/2) - 50);
-		PauseMenu.add(new Text("Paused", 20, 0, 0xffffffff));
+		PauseMenu.add(new Text("Paused", 20, 0));
 		PauseMenu.add(new Button("Resume Game", this, 0, 20, new function(){
 
 			@Override
@@ -238,13 +310,26 @@ public class Game extends Canvas implements Runnable{
 			}
 			
 		}));
-		PauseMenu.add(new Button("Quit", this, 30, 60, new function(){
+		PauseMenu.add(new Button("Change player", this, 0, 60, new function(){
+
+			@Override
+			public void run(Button b) {
+				// TODO Auto-generated method stub
+				PauseMenu.active = false;
+				PlayerChange.active = true;
+				
+			}
+			
+		}));
+        PauseMenu.add(new Button("Quit", this, 30, 80, new function(){
 
 			@Override
 			public void run(Button b) {
 				// TODO Auto-generated method stub
 				if(single){
 					send("/s/");
+				}else{
+					send("/d/"+id);
 				}
 				pause = false;
 				PauseMenu.active = false;
@@ -253,6 +338,48 @@ public class Game extends Canvas implements Runnable{
 			
 		}));
 		
+        PlayerChange = new Menu(10, 10);
+        PlayerChange.add(new SpriteButton(Sprite.player_red, this, 20, 10, new function(){
+
+			@Override
+			public void run(Button b) {
+				// TODO Auto-generated method stub
+				p.sprite = Sprite.player_red;
+				if(pause){
+					PauseMenu.active = true;
+				}
+				PlayerChange.active = false;
+			}
+			
+		}));
+        
+        PlayerChange.add(new SpriteButton(Sprite.player_blue, this, 40, 10, new function(){
+
+			@Override
+			public void run(Button b) {
+				// TODO Auto-generated method stub
+				p.sprite = Sprite.player_blue;
+				if(pause){
+					PauseMenu.active = true;
+				}
+				PlayerChange.active = false;
+			}
+			
+		}));
+        
+        PlayerChange.add(new SpriteButton(Sprite.player_green, this, 60, 10, new function(){
+
+			@Override
+			public void run(Button b) {
+				// TODO Auto-generated method stub
+				p.sprite = Sprite.player_green;
+				if(pause){
+					PauseMenu.active = true;
+				}
+				PlayerChange.active = false;
+			}
+			
+		}));
 		
 		
 		//-------------------------------------------------------------------------
@@ -260,7 +387,8 @@ public class Game extends Canvas implements Runnable{
 		menues.add(MainMenu);
 		menues.add(OptionsMenu);
 		menues.add(PauseMenu);
-		gameentities.add(new Player(10, 10, Sprite.player, keyboard));
+		menues.add(PlayerChange);
+		gameentities.add(new Player(10, 10, Sprite.player_red, keyboard));
 		p = (Player) gameentities.get(0);
 		this.addKeyListener(keyboard);
 		this.addMouseListener(new Mouse());
@@ -291,7 +419,23 @@ public class Game extends Canvas implements Runnable{
 				e.printStackTrace();
 			}
 			port = 4025;
-			new Server(true, 4025);
+			spserver = new Server(true, 4025);
+			PauseMenu.add(new Button("Open to lan", this, 100, 20, new function(){
+
+				@Override
+				public void run(Button b) {
+					// TODO Auto-generated method stub
+					spserver.single = false;
+					JOptionPane.showMessageDialog(frame, "Port: " + port);
+					PauseMenu.remove(b);
+					PauseMenu.add(new Button("Get Port", b.game, 100, 20, new function(){
+
+						@Override
+						public void run(Button b) {
+							// TODO Auto-generated method stub
+							JOptionPane.showMessageDialog(frame, "Port: " + port);
+						}}));
+				}}));
 		}
 		if(port == 0) port = 2743;
 		if(ip == null) try {
@@ -306,10 +450,9 @@ public class Game extends Canvas implements Runnable{
 		if(s == "false"){
 			return false;
 		}
-		recvthread();
 		s = s.substring(3);
 		id = Integer.parseInt(s);
-		
+		recvthread();
 		return true;
 	}
 
@@ -329,7 +472,10 @@ public class Game extends Canvas implements Runnable{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				menu.stop();
 				frame.dispose();
+				menu.close();
+				peacefull.close();
 			}
 		};
 		stop.start();
@@ -341,13 +487,37 @@ public class Game extends Canvas implements Runnable{
 		long lastTime = System.nanoTime();
 		long timer = System.currentTimeMillis();
 		final double nsups = 1000000000.0 / 60.0;
-		final double nsfps = 1000000000.0 / 60.0;
+		final double nsfps = 1000000000.0 / 30.0;
 		double deltaups = 0;
 		double deltafps = 0;
 		int frames = 0;
 		int updates = 0;
 		this.requestFocus();
 		while(running){
+			if(!this.hasFocus()){
+				new Thread("focus"){
+					public void run(){
+						running = false;
+						
+						try {
+							runningthread.join();
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						while(!game.hasFocus()){
+							try {
+								Thread.sleep(100);
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+						start();
+						
+					}
+				};
+			}
 			long now = System.nanoTime();
 			deltaups += (now-lastTime) / nsups;
 			deltafps += (now-lastTime) / nsfps;
@@ -378,24 +548,48 @@ public class Game extends Canvas implements Runnable{
 					try{
 					String s = receive();
 					if(s.startsWith("/u/")){
-						send("/u/" + name + "/" + id + "/" + p.x + "/" + p.y);
+						int col;
+						if(p.sprite == Sprite.player_red){
+							col = 0;
+						}else if(p.sprite == Sprite.player_blue){
+							col = 1;
+						}else{
+							col = 2;
+						}
+						send("/u/" + name + "/" + id + "/" + p.x + "/" + p.y + "/" + p.rotation + "/" + col + "/" + p.sound + "/" + p.scent);
 						String players = receive();
-						System.out.println(players);
-						gameentities.clear();
-						players = players.substring(3);
-						String[] playerarray = players.split("/p/");
+						ArrayList newentities = new ArrayList<Entity>();
+						String[] info = players.split("/i/|/zi/");
+						String[] playerarray = info[1].split("/p/");
 						for(int i = 0; i < playerarray.length; i++){
 							String[] playerinfo = playerarray[i].split("/");
 							if(id != Integer.parseInt(playerinfo[1])){ 
-								Player p = new Player(Integer.parseInt(playerinfo[2]), Integer.parseInt(playerinfo[3]), Sprite.player, keyboard);
+								Player p = new Player(Integer.parseInt(playerinfo[2]), Integer.parseInt(playerinfo[3]), Sprite.player_blue, keyboard);
 								p.networked = true;
 								p.name = playerinfo[0];
 								p.id = Integer.parseInt(playerinfo[1]);
-								gameentities.add(p);
+								p.rotation = Double.parseDouble(playerinfo[4]);
+								if(playerinfo[5].equals("0")){
+									p.sprite = Sprite.player_red;
+								}else if(playerinfo[5].equals("1")){
+									p.sprite = Sprite.player_blue;
+								}else if(playerinfo[5].equals("2")){
+									p.sprite = Sprite.player_green;
+								}
+								newentities.add(p);
 							}else{
-								gameentities.add(p);
+								newentities.add(p);
 							}
 						}
+						String[] zombiearray = info[2].split("/z/");
+						for(int i = 0; i < zombiearray.length; i++){
+							String[] zombieinfo = zombiearray[i].split("/");
+							Zombie z = new Zombie(Integer.parseInt(zombieinfo[0]), Integer.parseInt(zombieinfo[1]), Sprite.zombie_1_idle, null);
+							z.networked = true;
+							z.rotation = Double.parseDouble(zombieinfo[2]);
+							newentities.add(z);
+						}
+						gameentities = newentities;
 					}else if(s.startsWith("/t/")){
 						send("/r/" + id);
 					}
@@ -426,7 +620,7 @@ public class Game extends Canvas implements Runnable{
 					}
 				}
 			}
-			keyboard.resetKey(KeyEvent.VK_ESCAPE);
+			
 		}
 		
 		if(keyboard.getKey(KeyEvent.VK_F11)){
@@ -480,6 +674,18 @@ public class Game extends Canvas implements Runnable{
 			currentlevel.update();
 			screen.xOffset = p.x - ((width/2)-16);
 			screen.yOffset = p.y - ((height/2)-16);
+		}
+		keyboard.resetKey(KeyEvent.VK_ESCAPE);
+		
+		if(!pause && !ingame){
+			peacefull.stop();
+			menu.start();
+			menu.loop(Clip.LOOP_CONTINUOUSLY);
+		}
+		if(pause || ingame){
+			peacefull.start();
+			menu.stop();
+			peacefull.loop(Clip.LOOP_CONTINUOUSLY);
 		}
 		
 	}

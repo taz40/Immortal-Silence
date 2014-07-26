@@ -16,8 +16,12 @@ public class Button extends MenuItem {
 	public Game game;
 	public String text;
 	function f;
+	public int hovercol, col;
+	public static int defaulthovercol = 0xff505050;
+	public static int defaultcol = 0xffd0d0d0;
+	boolean customcol = true;
 	
-	public Button(String text, Game g, int x, int y, function f){
+	public Button(String text, Game g, int x, int y, int col, int hovercol, function f){
 		super(x, y);
 		this.f = f;
 		this.text = text;
@@ -27,6 +31,13 @@ public class Button extends MenuItem {
 		rawwidth = fm.stringWidth(text);
 		height = (fm.getHeight()*game.scale);
 		width = (fm.stringWidth(text)*game.scale);
+		this.col = col;
+		this.hovercol = hovercol;
+	}
+	
+	public Button(String text, Game g, int x, int y, function f){
+		this(text, g, x, y, defaultcol, defaulthovercol, f);
+		customcol = false;
 	}
 
 	@Override
@@ -47,7 +58,14 @@ public class Button extends MenuItem {
 			hover = true;
 			if(Mouse.clicked){
 				Mouse.clicked = false;
-				f.run(this);
+				final Button b = this;
+				Thread run = new Thread("button"){
+					public void run(){
+						f.run(b);
+					}
+					
+				};
+				run.start();
 			}
 		}else{
 			hover = false;
@@ -57,9 +75,18 @@ public class Button extends MenuItem {
 	@Override
 	public void render(Screen screen, int x1, int y1) {
 		// TODO Auto-generated method stub
-		int col = 0xffd0d0d0;
-		if(hover) col = 0xff505050;
+		int col = this.col;
+		if(hover) col = hovercol;
 		screen.renderString(x+x1, y+y1, text, false, col);
+	}
+
+	@Override
+	public void refresh() {
+		// TODO Auto-generated method stub
+		if(!customcol){
+			col = defaultcol;
+			hovercol = defaulthovercol;
+		}
 	}
 
 }

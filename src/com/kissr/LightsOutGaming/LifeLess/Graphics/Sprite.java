@@ -12,7 +12,11 @@ public class Sprite {
 	public static Sprite grass = new Sprite(0, 0, 16, 16, SpriteSheet.LevelSprites);
 	public static Sprite floor = new Sprite(1, 1, 16, 16, SpriteSheet.LevelSprites);
 	public static Sprite hedge = new Sprite(1, 0, 16, 16, SpriteSheet.LevelSprites);
-	public static Sprite player = new Sprite(1, 2, 16, 16, SpriteSheet.MainSheet);
+	public static Sprite player_red = new Sprite(1, 2, 16, 16, SpriteSheet.MainSheet);
+	public static Sprite player_blue = new Sprite(6, 1, 16, 16, SpriteSheet.MainSheet);
+	public static Sprite player_green = new Sprite(9, 2, 16, 16, SpriteSheet.MainSheet);
+	public static Sprite zombie_1_idle = new Sprite(0, 1, 16, 16, SpriteSheet.MainSheet);
+	public static Sprite zombie_1_attack = new Sprite(0, 0, 16, 16, SpriteSheet.MainSheet);
 	
 	public Sprite(int x, int y, int width, int height, SpriteSheet sheet){
 		this.width = width;

@@ -6,6 +6,8 @@ public class Text extends MenuItem {
 	
 	public String text;
 	public int color;
+	public static int defaultcol = 0xffffffff;
+	boolean customcol = true;
 	
 	public Text(String text, int x, int y, int col){
 		super(x, y);
@@ -14,7 +16,8 @@ public class Text extends MenuItem {
 	}
 	
 	public Text(String text, int x, int y){
-		this(text, x, y, 0xff000000);
+		this(text, x, y, defaultcol);
+		customcol = false;
 	}
 
 	@Override
@@ -27,6 +30,14 @@ public class Text extends MenuItem {
 	public void render(Screen screen, int x, int y) {
 		// TODO Auto-generated method stub
 		screen.renderString(this.x+x, this.y+y, text, false, color);
+	}
+
+	@Override
+	public void refresh() {
+		// TODO Auto-generated method stub
+		if(!customcol){
+			color = defaultcol;
+		}
 	}
 
 }

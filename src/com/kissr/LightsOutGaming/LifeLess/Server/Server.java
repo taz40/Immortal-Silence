@@ -8,18 +8,23 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.kissr.LightsOutGaming.LifeLess.Graphics.Sprite;
+import com.kissr.LightsOutGaming.LifeLess.entity.Zombie;
+
 public class Server implements Runnable {
 
 	public static final int MAX_ATTEMPTS = 5;
 	
 	public boolean single = true;
+	boolean firsttime = true;
 	public int port;
 	DatagramSocket socket;
 	Thread run;
 	boolean running = true;
-	private List<ServerClient> clients = new ArrayList<ServerClient>();
-	private List<Integer> responses = new ArrayList<Integer>();
-	private List<Integer> updateresponses = new ArrayList<Integer>();
+	public List<ServerClient> clients = new ArrayList<ServerClient>();
+	List<Integer> responses = new ArrayList<Integer>();
+	List<Integer> updateresponses = new ArrayList<Integer>();
+	List<Zombie> zombies = new ArrayList<Zombie>();
 	
 	public Server(boolean single, int port){
 		this.single = single;
@@ -31,6 +36,7 @@ public class Server implements Runnable {
 			e.printStackTrace();
 			return;
 		}
+		zombies.add(new Zombie(10, 10, Sprite.zombie_1_idle, this));
 		run = new Thread(this, "Server");
 		run.start();
 	}
@@ -107,9 +113,12 @@ public class Server implements Runnable {
 				long lastTime = System.nanoTime();
 				final double ns = 1000000000.0 / 30.0;
 				double delta = 0;
+				final double nsu = 1000000000.0 / 30.0;
+				double deltau = 0;
 				while(running){
 					long now = System.nanoTime();
 					delta += (now-lastTime) / ns;
+					deltau += (now-lastTime) / nsu;
 					lastTime = now;
 					while(delta >= 1){
 						for(int i = 0; i < clients.size(); i++){
@@ -117,6 +126,13 @@ public class Server implements Runnable {
 							//System.out.println("updated");
 						}
 						delta--;
+					}
+					
+					while(deltau >= 1){
+						for(int i = 0; i < zombies.size(); i++){
+							zombies.get(i).update();
+						}
+						deltau--;
 					}
 				}
 			}
@@ -176,18 +192,19 @@ public class Server implements Runnable {
 	private void process(DatagramPacket packet) {
 		// TODO Auto-generated method stub
 		String string = new String(packet.getData()).split("/e/")[0];
-		if(string.startsWith("/c/")){
+		if(string.startsWith("/c/") && (!single || firsttime)){
 			int id = UniqueIdentifier.getIdentifier();
 			System.out.println(id);
 			clients.add(new ServerClient(string.substring(3, string.length()), packet.getAddress(), packet.getPort(), id));
 			send("/c/"+id, clients.get(clients.size() - 1).address, clients.get(clients.size() - 1).port);
+			if(single) firsttime = false;
 		}else if(string.startsWith("/s/")){
 			running = false;
+			socket.close();
 		}else if(string.startsWith("/u/")){
 			String[] tokens = string.split("/u/|/");
 			String name = tokens[1];
 			int id = Integer.parseInt(tokens[2]);
-			System.out.println("response from " + name + "(" + id + ")");
 			updateresponses.add(id);
 			ServerClient client = getClientById(id);
 			if(client == null){
@@ -195,12 +212,23 @@ public class Server implements Runnable {
 			}
 			client.x = Integer.parseInt(tokens[3]);
 			client.y = Integer.parseInt(tokens[4]);
-			String msg = "/i/" + (clients.get(0).name + "/" + clients.get(0).GetID() + "/" + Integer.toString(clients.get(0).x) + "/" + Integer.toString(clients.get(0).y));
+			client.rotation = Double.parseDouble(tokens[5]);
+			client.playercolor = Integer.parseInt(tokens[6]);
+			client.sound = Integer.parseInt(tokens[7]);
+			client.scent = Integer.parseInt(tokens[8]);
+			String msg = "/i/" + (clients.get(0).name + "/" + clients.get(0).GetID() + "/" + Integer.toString(clients.get(0).x) + "/" + Integer.toString(clients.get(0).y) + "/" + clients.get(0).rotation + "/" + clients.get(0).playercolor);
 			if(clients.size() == 1){
 				//msg += "/p/";
 			}
 			for(int i = 1; i < clients.size(); i++){
-				msg += "/p/" + (clients.get(i).name + "/" + clients.get(i).GetID() + "/" + clients.get(i).x + "/" + clients.get(i).y);
+				msg += "/p/" + (clients.get(i).name + "/" + clients.get(i).GetID() + "/" + clients.get(i).x + "/" + clients.get(i).y + "/" + clients.get(i).rotation + "/" + clients.get(i).playercolor);
+			}
+			msg += "/zi/";
+			if(zombies.size() >= 1){
+			msg += Integer.toString(zombies.get(0).x) + "/" + Integer.toString(zombies.get(0).y) + "/" + zombies.get(0).rotation;
+			for(int i = 1; i < zombies.size(); i++){
+				msg += "/z/" + Integer.toString(zombies.get(i).x) + "/" + Integer.toString(zombies.get(i).y) + "/" + zombies.get(i).rotation;
+			}
 			}
 			send(msg, client.address, client.port);
 		}else if(string.startsWith("/d/")){
