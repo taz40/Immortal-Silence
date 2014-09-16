@@ -16,6 +16,7 @@ public class Server implements Runnable {
 	public static final int MAX_ATTEMPTS = 5;
 	
 	public boolean single = true;
+	boolean singleconnect = false;
 	boolean firsttime = true;
 	public int port;
 	DatagramSocket socket;
