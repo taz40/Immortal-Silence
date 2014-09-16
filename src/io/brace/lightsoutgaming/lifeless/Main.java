@@ -18,6 +18,7 @@ public class Main extends LightsOut {
 	public static Sprite player_left = player_up.rotate(270);
 	public static Sprite player_right = player_up.rotate(90);
 	public static Sprite zombie = new Sprite(0, 0, 3, 16, main);
+	boolean playerCreated = false;
 	
 	public static void main(String[] args){
 		new Main().init();
@@ -28,9 +29,8 @@ public class Main extends LightsOut {
 		// TODO Auto-generated method stub
 		createDisplay("Life Less", 800, 600);
 		start();
-		Server s = new Server(false, 1010, "LifeLess 0.1");
 		socket = NetInit();
-		connect("localhost", 1010, "taz40", "LifeLess 0.1", socket);
+		connect("localhost", 1010, "taz40", "LifeLess 0.1", socket, this);
 		createObject(Player.class, serverIP, serverPort, socket);
 		
 	}
@@ -43,6 +43,15 @@ public class Main extends LightsOut {
 		for(int i = 0; i < myObjects.size(); i++){
 			myObjects.get(i).render(screen);
 		}
+		for(int i = 0; i < networkObjects.size(); i++){
+			networkObjects.get(i).render(screen);
+		}
+		if(playerCreated){
+			screen.xOffset = (myObjects.get(0).getX())-((screen.getWidth()/2)-8*3);
+			screen.yOffset = (myObjects.get(0).getY())-((screen.getHeight()/2)-8*3);
+		}else if(myObjects.size() > 0){
+			playerCreated = true;
+		}
 		show();
 	}
 
@@ -51,6 +60,9 @@ public class Main extends LightsOut {
 		// TODO Auto-generated method stub
 		for(int i = 0; i < myObjects.size(); i++){
 			myObjects.get(i).update();
+		}
+		for(int i = 0; i < myObjects.size(); i++){
+			sendObject(myObjects.get(i), serverIP, serverPort, socket);
 		}
 		//screen.xOffset = myObjects.get(0).getX();
 		//screen.yOffset = myObjects.get(0).getY();

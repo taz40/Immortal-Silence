@@ -45,19 +45,26 @@ public class Player extends Networked {
 	@Override
 	public void render(Screen s) {
 		// TODO Auto-generated method stub
-		s.renderSprite(376, 276, this.s, false);
+		if(ismine){
+			s.renderSprite(376, 276, this.s, false);
+		}else{
+			s.renderSprite(x, y, this.s, true);
+		}
+		
 	}
 
 	@Override
 	public String[] send() {
 		// TODO Auto-generated method stub
-		return null;
+		String[] result = {x+"", ""+y};
+		return result;
 	}
 
 	@Override
 	public void recv(String[] data) {
 		// TODO Auto-generated method stub
-		
+		x = Integer.parseInt(data[0]);
+		y = Integer.parseInt(data[1]);
 	}
 
 }
