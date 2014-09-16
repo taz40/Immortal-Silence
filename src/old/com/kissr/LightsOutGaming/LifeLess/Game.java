@@ -1,4 +1,4 @@
-package com.kissr.LightsOutGaming.LifeLess;
+package old.com.kissr.LightsOutGaming.LifeLess;
 
 import java.awt.Canvas;
 import java.awt.Color;
