@@ -11,6 +11,7 @@ import io.brace.lightsoutgaming.lifeless.Main;
 public class Player extends Networked {
 	
 	Sprite s = Main.player_up;
+	int dir = 0;
 
 	@Override
 	public void update() {
@@ -30,25 +31,34 @@ public class Player extends Networked {
 		}
 		
 		if(my < 0){
-			s = Main.player_up;
+			dir = 0;
 		}else if(my > 0){
-			s = Main.player_down;
+			dir = 1;
 		}else if(mx < 0){
-			s = Main.player_left;
+			dir = 2;
 		}else if(mx > 0){
-			s = Main.player_right;
+			dir = 3;
 		}
 		x += mx;
 		y += my;
 	}
 
 	@Override
-	public void render(Screen s) {
+	public void render(Screen sc) {
 		// TODO Auto-generated method stub
+		if(dir == 0){
+			s = Main.player_up;
+		}else if(dir == 1){
+			s = Main.player_down;
+		}else if(dir == 2){
+			s = Main.player_left;
+		}else if(dir == 3){
+			s = Main.player_right;
+		}
 		if(ismine){
-			s.renderSprite(376, 276, this.s, false);
+			sc.renderSprite(376, 276, this.s, false);
 		}else{
-			s.renderSprite(x, y, this.s, true);
+			sc.renderSprite(x, y, this.s, true);
 		}
 		
 	}
@@ -56,7 +66,10 @@ public class Player extends Networked {
 	@Override
 	public String[] send() {
 		// TODO Auto-generated method stub
-		String[] result = {x+"", ""+y};
+		String[] result = new String[3];
+		result[0] = x+"";
+		result[1] = y+"";
+		result[2] = dir+"";
 		return result;
 	}
 
@@ -65,6 +78,7 @@ public class Player extends Networked {
 		// TODO Auto-generated method stub
 		x = Integer.parseInt(data[0]);
 		y = Integer.parseInt(data[1]);
+		dir = Integer.parseInt(data[2]);
 	}
 
 }
