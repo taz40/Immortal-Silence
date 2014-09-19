@@ -6,13 +6,14 @@ import io.brace.lightsoutgaming.engine.Network.Server;
 import io.brace.lightsoutgaming.engine.graphics.Sprite;
 import io.brace.lightsoutgaming.engine.graphics.SpriteSheet;
 import io.brace.lightsoutgaming.lifeless.entities.Player;
+import io.brace.lightsoutgaming.lifeless.entities.Zombie;
 
 import java.net.DatagramSocket;
 
 public class Main extends LightsOut {
 	
 	DatagramSocket socket;
-	static SpriteSheet main = new SpriteSheet("/Textures/MainSheet.png");
+	public static SpriteSheet main = new SpriteSheet("/Textures/MainSheet.png");
 	public static Sprite player_up = new Sprite(1, 2, 3, 16, main);
 	public static Sprite player_down = player_up.rotate(180);
 	public static Sprite player_left = player_up.rotate(270);
@@ -32,6 +33,7 @@ public class Main extends LightsOut {
 		socket = NetInit();
 		connect("localhost", 1010, "taz40", "LifeLess 0.1", socket, this);
 		createObject(Player.class, serverIP, serverPort, socket);
+		createObject(Zombie.class, serverIP, serverPort, socket);
 		
 	}
 
