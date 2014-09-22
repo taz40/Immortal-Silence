@@ -12,6 +12,7 @@ public class Player extends Networked {
 	
 	Sprite s = Main.player_up;
 	int dir = 0;
+	float speed = 2;
 
 	@Override
 	public void update() {
@@ -39,8 +40,8 @@ public class Player extends Networked {
 		}else if(mx > 0){
 			dir = 3;
 		}
-		x += mx;
-		y += my;
+		x += (mx)*speed;
+		y += (my)*speed;
 	}
 
 	@Override

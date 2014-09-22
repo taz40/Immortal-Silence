@@ -1,5 +1,6 @@
 package io.brace.lightsoutgaming.immortalSilence.entities;
 
+import io.brace.lightsoutgaming.engine.Network.NetworkUtils;
 import io.brace.lightsoutgaming.engine.Network.Networked;
 import io.brace.lightsoutgaming.engine.Network.Server;
 import io.brace.lightsoutgaming.engine.Network.ServerClient;
@@ -7,11 +8,8 @@ import io.brace.lightsoutgaming.engine.graphics.Screen;
 import io.brace.lightsoutgaming.engine.graphics.Sprite;
 import io.brace.lightsoutgaming.immortalSilence.Main;
 
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Random;
 
 public class Zombie extends Networked{
 	
@@ -44,8 +42,44 @@ public class Zombie extends Networked{
 	@Override
 	public void update() {
 		// TODO Auto-generated method stub
-		x++;
-		rotation = 90;
+		ArrayList<Networked> targets = new ArrayList<Networked>();
+		for(int i = 0; i < NetworkUtils.myObjects.size(); i++){
+			if(NetworkUtils.myObjects.get(i).classname.equals(Player.class.getName())){
+				targets.add(NetworkUtils.myObjects.get(i));
+			}
+		}
+		for(int i = 0; i < NetworkUtils.networkObjects.size(); i++){
+			if(NetworkUtils.networkObjects.get(i).classname.equals(Player.class.getName())){
+				targets.add(NetworkUtils.networkObjects.get(i));
+			}
+		}
+		double closestDist = 9999999;
+		Networked closestTarget = null;
+		for(int i = 0; i < targets.size(); i++){
+			if(Math.sqrt((targets.get(i).getX() - x)*(targets.get(i).getX() - x) + (targets.get(i).getY() - y)*(targets.get(i).getY() - y)) < closestDist){
+				closestDist = Math.sqrt((targets.get(i).getX() - x)^2 + (targets.get(i).getY() - y)^2);
+				closestTarget = targets.get(i);
+			}
+		}
+		Random rand = new Random();
+		targetx = closestTarget.getX() + rand.nextInt(10);
+		targety = closestTarget.getY() + rand.nextInt(10);
+		if(targetx > x){
+			x++;
+			rotation = 90;
+		}
+		if(targetx < x){
+			x--;
+			rotation = 270;
+		}
+		if(targety < y){
+			y--;
+			rotation = 0;
+		}
+		if(targety > y){
+			y++;
+			rotation = 180;
+		}
 	}
 
 	@Override
