@@ -1,4 +1,4 @@
-package io.brace.lightsoutgaming.lifeless.entities;
+package io.brace.lightsoutgaming.immortalSilence.entities;
 
 import java.awt.event.KeyEvent;
 
@@ -6,7 +6,7 @@ import io.brace.lightsoutgaming.engine.Network.Networked;
 import io.brace.lightsoutgaming.engine.graphics.Screen;
 import io.brace.lightsoutgaming.engine.graphics.Sprite;
 import io.brace.lightsoutgaming.engine.input.Keyboard;
-import io.brace.lightsoutgaming.lifeless.Main;
+import io.brace.lightsoutgaming.immortalSilence.Main;
 
 public class Player extends Networked {
 	

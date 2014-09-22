@@ -1,12 +1,12 @@
-package io.brace.lightsoutgaming.lifeless;
+package io.brace.lightsoutgaming.immortalSilence;
 
 import static io.brace.lightsoutgaming.engine.Network.NetworkUtils.*;
 import io.brace.lightsoutgaming.engine.LightsOut;
 import io.brace.lightsoutgaming.engine.Network.Server;
 import io.brace.lightsoutgaming.engine.graphics.Sprite;
 import io.brace.lightsoutgaming.engine.graphics.SpriteSheet;
-import io.brace.lightsoutgaming.lifeless.entities.Player;
-import io.brace.lightsoutgaming.lifeless.entities.Zombie;
+import io.brace.lightsoutgaming.immortalSilence.entities.Player;
+import io.brace.lightsoutgaming.immortalSilence.entities.Zombie;
 
 import java.net.DatagramSocket;
 
@@ -28,10 +28,10 @@ public class Main extends LightsOut {
 	@Override
 	protected void init() {
 		// TODO Auto-generated method stub
-		createDisplay("Life Less", 800, 600);
+		createDisplay("Immortal Silence", 800, 600);
 		start();
 		socket = NetInit();
-		connect("localhost", 1010, "taz40", "LifeLess 0.1", socket, this);
+		connect("localhost", 1010, "taz40", "Immortal Silence 0.1", socket, this);
 		createObject(Player.class, serverIP, serverPort, socket);
 		createObject(Zombie.class, serverIP, serverPort, socket);
 		

@@ -1,11 +1,11 @@
-package io.brace.lightsoutgaming.lifeless.entities;
+package io.brace.lightsoutgaming.immortalSilence.entities;
 
 import io.brace.lightsoutgaming.engine.Network.Networked;
 import io.brace.lightsoutgaming.engine.Network.Server;
 import io.brace.lightsoutgaming.engine.Network.ServerClient;
 import io.brace.lightsoutgaming.engine.graphics.Screen;
 import io.brace.lightsoutgaming.engine.graphics.Sprite;
-import io.brace.lightsoutgaming.lifeless.Main;
+import io.brace.lightsoutgaming.immortalSilence.Main;
 
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
