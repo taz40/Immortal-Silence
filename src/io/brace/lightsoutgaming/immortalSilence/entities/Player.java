@@ -15,7 +15,7 @@ public class Player extends Networked {
 	Sprite s = Main.player_up;
 	int dir = 0;
 	float speed = 2;
-	Weapon gun = new Weapon(10, 3, 10);
+	Weapon gun = new Weapon(10, 1, 10, 12, 24, 4);
 
 	@Override
 	public void update() {
@@ -56,6 +56,8 @@ public class Player extends Networked {
 	@Override
 	public void render(Screen sc) {
 		// TODO Auto-generated method stub
+		sc.renderSprite(50, 50, Weapon.pistol_round, false);
+		gun.render(sc);
 		if(dir == 0){
 			s = Main.player_up;
 		}else if(dir == 1){
