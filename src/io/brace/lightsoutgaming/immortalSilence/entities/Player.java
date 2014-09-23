@@ -6,13 +6,16 @@ import io.brace.lightsoutgaming.engine.Network.Networked;
 import io.brace.lightsoutgaming.engine.graphics.Screen;
 import io.brace.lightsoutgaming.engine.graphics.Sprite;
 import io.brace.lightsoutgaming.engine.input.Keyboard;
+import io.brace.lightsoutgaming.engine.input.Mouse;
 import io.brace.lightsoutgaming.immortalSilence.Main;
+import io.brace.lightsoutgaming.immortalSilence.Weapon;
 
 public class Player extends Networked {
 	
 	Sprite s = Main.player_up;
 	int dir = 0;
 	float speed = 2;
+	Weapon gun = new Weapon(10, 3, 10);
 
 	@Override
 	public void update() {
@@ -42,6 +45,12 @@ public class Player extends Networked {
 		}
 		x += (mx)*speed;
 		y += (my)*speed;
+		
+		gun.update();
+		
+		if(Mouse.button == 1){
+			gun.fire(0);
+		}
 	}
 
 	@Override

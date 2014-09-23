@@ -41,7 +41,6 @@ public class Main extends LightsOut {
 	protected void render() {
 		// TODO Auto-generated method stub
 		screen.clear();
-		screen.renderSprite(10, 10, zombie, true);
 		for(int i = 0; i < myObjects.size(); i++){
 			myObjects.get(i).render(screen);
 		}

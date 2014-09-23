@@ -62,23 +62,25 @@ public class Zombie extends Networked{
 			}
 		}
 		Random rand = new Random();
+		if(closestTarget!= null){
 		targetx = closestTarget.getX() + rand.nextInt(10);
 		targety = closestTarget.getY() + rand.nextInt(10);
-		if(targetx > x){
+		if(targetx > x+20){
 			x++;
 			rotation = 90;
 		}
-		if(targetx < x){
+		if(targetx < x-20){
 			x--;
 			rotation = 270;
 		}
-		if(targety < y){
+		if(targety < y-20){
 			y--;
 			rotation = 0;
 		}
-		if(targety > y){
+		if(targety > y+20){
 			y++;
 			rotation = 180;
+		}
 		}
 	}
 
