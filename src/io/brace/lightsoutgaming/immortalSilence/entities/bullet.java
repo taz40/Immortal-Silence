@@ -6,7 +6,8 @@ import io.brace.lightsoutgaming.engine.graphics.Sprite;
 
 public abstract class bullet extends Networked {
 	
-	int vx, vy;
+	public double vx, vy;
+	public double rot;
 
 	@Override
 	public String[] send() {

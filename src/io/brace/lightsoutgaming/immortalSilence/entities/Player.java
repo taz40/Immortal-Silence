@@ -49,7 +49,7 @@ public class Player extends Networked {
 		gun.update();
 		
 		if(Mouse.button == 1){
-			gun.fire(0);
+			gun.fire(Math.atan2(Mouse.mouseY - y,Mouse.mouseX - x), x, y);
 		}
 	}
 

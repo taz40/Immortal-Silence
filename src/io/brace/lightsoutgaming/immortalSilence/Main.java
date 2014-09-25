@@ -12,7 +12,7 @@ import java.net.DatagramSocket;
 
 public class Main extends LightsOut {
 	
-	DatagramSocket socket;
+	public static DatagramSocket socket;
 	public static SpriteSheet main = new SpriteSheet("/Textures/MainSheet.png");
 	public static Sprite player_up = new Sprite(1, 2, 3, 16, main);
 	public static Sprite player_down = player_up.rotate(180);

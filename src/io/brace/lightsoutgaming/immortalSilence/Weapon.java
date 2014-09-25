@@ -1,9 +1,12 @@
 package io.brace.lightsoutgaming.immortalSilence;
 
 import io.brace.lightsoutgaming.engine.Entity;
+import io.brace.lightsoutgaming.engine.Network.NetworkUtils;
 import io.brace.lightsoutgaming.engine.graphics.Screen;
 import io.brace.lightsoutgaming.engine.graphics.Sprite;
 import io.brace.lightsoutgaming.engine.input.Keyboard;
+import io.brace.lightsoutgaming.immortalSilence.entities.PistolBullet;
+import io.brace.lightsoutgaming.immortalSilence.entities.bullet;
 
 import java.awt.event.KeyEvent;
 
@@ -79,11 +82,24 @@ public class Weapon extends Entity {
 	@Override
 	public void render(Screen s) {
 		// TODO Auto-generated method stub
-		System.out.println(ammoinclip + " / " + ammo);
 	}
 	
-	public void fire(double angle){
+	public void fire(double angle, int x, int y){
 		if(cooldownt >= cooldown && ammoinclip > 0){
+			int id = NetworkUtils.createObject(PistolBullet.class, NetworkUtils.serverIP, NetworkUtils.serverPort, Main.socket);
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			bullet b = (bullet)NetworkUtils.myObjects.get(id);
+			b.x = x;
+			b.y = y;
+			b.rot = Math.toDegrees(angle);
+			b.vx = PistolBullet.PistolSpeed * Math.cos(angle);
+			b.vy = PistolBullet.PistolSpeed * Math.sin(angle);
+			System.out.println("velocity, X: " + b.vx + ", Y: " + b.vy);
 			ammoinclip--;
 			System.out.println("bang!");
 			cooldownt = 0;
